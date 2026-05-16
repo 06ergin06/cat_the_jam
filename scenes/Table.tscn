@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bpfk4tbeukwpa" path="res://script/game_manager.gd" id="1_70yv6"]
 [ext_resource type="Texture2D" uid="uid://ddio6m77qm4o8" path="res://assets/images.jpg" id="2_o2178"]
-[ext_resource type="Texture2D" uid="uid://cm5j6oetpi7ve" path="res://assets/icon.svg" id="3_d5upp"]
 [ext_resource type="Script" uid="uid://b2fo6p3pioxt6" path="res://script/card_sc.gd" id="4_d5upp"]
 
-[node name="GameManager" type="Control" unique_id=315808563]
+[node name="Table" type="Control" unique_id=315808563]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,34 +15,11 @@ script = ExtResource("1_70yv6")
 
 [node name="BackGround" type="TextureRect" parent="." unique_id=304831816]
 layout_mode = 0
-offset_left = 194.0
-offset_top = 102.0
-offset_right = 1816.0199
-offset_bottom = 912.0
+offset_left = -23.0
+offset_top = -2.0
+offset_right = 1917.0
+offset_bottom = 1085.0
 texture = ExtResource("2_o2178")
-
-[node name="OkArea" type="TextureRect" parent="." unique_id=1716965302]
-layout_mode = 0
-offset_left = 1334.0
-offset_top = 286.0
-offset_right = 1462.0
-offset_bottom = 414.0
-texture = ExtResource("3_d5upp")
-
-[node name="NoArea" type="TextureRect" parent="." unique_id=1749578056]
-layout_mode = 0
-offset_left = 564.0
-offset_top = 296.0
-offset_right = 692.0
-offset_bottom = 429.0
-texture = ExtResource("3_d5upp")
-
-[node name="ScoreLabel" type="Label" parent="." unique_id=539414484]
-layout_mode = 0
-offset_left = 537.0
-offset_top = 241.0
-offset_right = 1537.0
-offset_bottom = 272.0
 
 [node name="Cards" type="Control" parent="." unique_id=50886936]
 anchors_preset = 0
