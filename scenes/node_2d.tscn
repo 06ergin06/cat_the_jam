@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://ol7ent0knaci"]
+
+[ext_resource type="Script" uid="uid://djt4jrlybynqw" path="res://script/login.gd" id="1_wtcfe"]
+
+[node name="Control" type="Control" unique_id=2028279815]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_wtcfe")
+
+[node name="Button" type="Button" parent="." unique_id=1271725506]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "sign in 42 intra"
+
+[node name="Label" type="Label" parent="." unique_id=1009210665]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 31.0
+offset_right = 41.0
+offset_bottom = 54.0
+
+[node name="NextStudentButton" type="Button" parent="." unique_id=543799740]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "get s"
+
+[node name="LogPanel" type="TextEdit" parent="." unique_id=1473714736]
+layout_mode = 0
+offset_left = 347.0
+offset_top = 126.0
+offset_right = 1117.0
+offset_bottom = 499.0
+editable = false
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="NextStudentButton" to="." method="_on_next_student_button_pressed"]
