@@ -16,6 +16,7 @@ signal initial_fetch_done
 signal pool_updated
 
 func load_pool_from_disk():
+	# Eski bozuk veya yapısı değişmiş JSON dosyasını acımasızca siliyoruz
 	if FileAccess.file_exists("user://pool_data.json"):
 		DirAccess.remove_absolute("user://pool_data.json")
 	return false
@@ -26,7 +27,7 @@ func save_current_pool():
 	file.close()
 
 func get_next_student():
-	# DÜZELTME: Havuz sıfır bile olsa HER ZAMAN arka planı dürt!
+	# Havuz sıfır bile olsa HER ZAMAN arka planı dürt!
 	check_and_fill_buffer()
 	
 	if student_pool.size() > 0:
@@ -41,6 +42,7 @@ func check_and_fill_buffer():
 		is_fetching = true
 		get_random_user()
 
+# --- 1. AŞAMA: TOKEN ALMA ---
 func get_access_token(code: String):
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -62,6 +64,7 @@ func _on_token_received(_result, response_code, _headers, body):
 	else:
 		print("Token Hatası: ", response_code)
 
+# --- 2. AŞAMA: RASTGELE KULLANICI ARAMA ---
 func get_random_user():
 	if student_pool.size() >= max_buffer_size:
 		is_fetching = false
@@ -70,7 +73,7 @@ func get_random_user():
 	await get_tree().create_timer(0.6).timeout 
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
-	http_request.timeout = 8.0 # 8 Saniye içinde yanıt gelmezse iptal et
+	http_request.timeout = 8.0 
 	http_request.request_completed.connect(_on_random_list_completed.bind(http_request))
 	
 	var random_page = randi_range(1, 150)
@@ -90,11 +93,12 @@ func _on_random_list_completed(_result, response_code, _headers, body, http_requ
 	else:
 		get_random_user()
 
+# --- 3. AŞAMA: DETAYLARI ÇEKME VE FİLTRELEME ---
 func get_detailed_user_data(user_id: int):
 	await get_tree().create_timer(0.6).timeout
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
-	http_request.timeout = 8.0 # 8 Saniye içinde yanıt gelmezse iptal et
+	http_request.timeout = 8.0 
 	http_request.request_completed.connect(_on_detailed_data_completed.bind(http_request, user_id))
 	
 	var url = "https://api.intra.42.fr/v2/users/" + str(user_id)
@@ -110,18 +114,35 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 			return
 			
 		var has_c_piscine = false
-		var pool_status = "unknown"
+		var is_core_student = false
+		var is_discovery_student = false
+		var pool_status = "pending" 
 		
+		# 1. Havuz Durumu ve Cursus Tespiti
 		for cursus in json["cursus_users"]:
-			if cursus["cursus"]["name"] == "C Piscine":
+			var c_name = str(cursus["cursus"]["name"])
+			
+			if "discovery" in c_name.to_lower():
+				is_discovery_student = true
+				
+			if c_name == "42cursus":
+				is_core_student = true
+				
+			if c_name == "C Piscine":
 				has_c_piscine = true
-				if cursus.has("end_at") and cursus["end_at"] != null:
-					if cursus.has("grade") and cursus["grade"] == "Passed":
+				if cursus.has("grade") and cursus["grade"] != null:
+					var grade_str = str(cursus["grade"]).strip_edges()
+					if grade_str == "Passed":
 						pool_status = "passed"
-					else:
+					elif grade_str != "":
 						pool_status = "failed"
 		
-		if not has_c_piscine:
+		if is_core_student:
+			pool_status = "passed"
+			
+		# SIKI YÖNETİM FİLTRESİ: Discovery, Pending veya Havuzsuz olanları reddet
+		if not has_c_piscine or pool_status == "pending" or is_discovery_student:
+			print("AYIKLANDI: Discovery veya sonucu belirsiz öğrenci atlandı -> ", json["login"])
 			get_random_user()
 			return
 			
@@ -130,6 +151,7 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 		var projeler_listesi = []
 		var sinavlar_listesi = []
 		
+		# 2. Proje ve Sınav Ayıklama
 		if json.has("projects_users"):
 			for p in json["projects_users"]:
 				var is_piscine_project = false
@@ -141,11 +163,17 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 							break
 				
 				if not is_piscine_project and p.has("project") and p["project"].has("slug"):
-					if "piscine" in str(p["project"]["slug"]).to_lower():
+					var p_slug = str(p["project"]["slug"]).to_lower()
+					if "piscine" in p_slug and not "discovery" in p_slug:
 						is_piscine_project = true
 
 				if is_piscine_project:
 					var p_name = str(p["project"]["name"])
+					
+					# Çift Güvenlik: Proje isminde discovery varsa atla
+					if "discovery" in p_name.to_lower():
+						continue
+						
 					var p_mark = str(p["final_mark"]) if p["final_mark"] != null else "0"
 					var entry = p_name + ": " + p_mark
 					
@@ -174,11 +202,12 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 	else:
 		get_random_user()
 
+# --- 4. AŞAMA: FEEDBACKLERİ ÇEKME ---
 func get_user_feedbacks(user_id: int, student_data: Dictionary):
 	await get_tree().create_timer(0.6).timeout
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
-	http_request.timeout = 8.0 # 8 Saniye içinde yanıt gelmezse iptal et
+	http_request.timeout = 8.0 
 	http_request.request_completed.connect(_on_feedbacks_completed.bind(http_request, student_data, user_id))
 	
 	var url = "https://api.intra.42.fr/v2/users/" + str(user_id) + "/scale_teams/as_corrected?sort=-created_at&page[size]=3"
