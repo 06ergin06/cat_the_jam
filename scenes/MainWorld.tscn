@@ -30,6 +30,9 @@ offset_bottom = 92.0
 grow_horizontal = 0
 grow_vertical = 2
 
+[node name="ResultLabel" type="Label" parent="TextUI/Answerbox" unique_id=845262398]
+layout_mode = 2
+
 [node name="BtnOk" type="Button" parent="TextUI/Answerbox" unique_id=278464143]
 custom_minimum_size = Vector2(200, 90)
 layout_mode = 2
@@ -39,6 +42,14 @@ text = "Geçtin"
 custom_minimum_size = Vector2(200, 90)
 layout_mode = 2
 text = "Kaldın"
+
+[node name="BtnProfile" type="Button" parent="TextUI/Answerbox" unique_id=853036369]
+layout_mode = 2
+text = "intra profile"
+
+[node name="BtnNext" type="Button" parent="TextUI/Answerbox" unique_id=630208901]
+layout_mode = 2
+text = "next student"
 
 [node name="ScoreLabel" type="Label" parent="TextUI" unique_id=1161366406]
 anchors_preset = 5

@@ -16,7 +16,6 @@ signal initial_fetch_done
 signal pool_updated
 
 func load_pool_from_disk():
-	# Eski bozuk veya yapısı değişmiş JSON dosyasını acımasızca siliyoruz
 	if FileAccess.file_exists("user://pool_data.json"):
 		DirAccess.remove_absolute("user://pool_data.json")
 	return false
@@ -27,14 +26,11 @@ func save_current_pool():
 	file.close()
 
 func get_next_student():
-	# Havuz sıfır bile olsa HER ZAMAN arka planı dürt!
 	check_and_fill_buffer()
-	
 	if student_pool.size() > 0:
 		var student = student_pool.pop_front()
 		save_current_pool()
 		return student
-		
 	return null
 
 func check_and_fill_buffer():
@@ -42,11 +38,10 @@ func check_and_fill_buffer():
 		is_fetching = true
 		get_random_user()
 
-# --- 1. AŞAMA: TOKEN ALMA ---
 func get_access_token(code: String):
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
-	http_request.timeout = 8.0 # 8 Saniye içinde yanıt gelmezse iptal et
+	http_request.timeout = 8.0 
 	http_request.request_completed.connect(_on_token_received)
 	
 	var token_url = "https://api.intra.42.fr/oauth/token"
@@ -64,7 +59,6 @@ func _on_token_received(_result, response_code, _headers, body):
 	else:
 		print("Token Hatası: ", response_code)
 
-# --- 2. AŞAMA: RASTGELE KULLANICI ARAMA ---
 func get_random_user():
 	if student_pool.size() >= max_buffer_size:
 		is_fetching = false
@@ -93,7 +87,6 @@ func _on_random_list_completed(_result, response_code, _headers, body, http_requ
 	else:
 		get_random_user()
 
-# --- 3. AŞAMA: DETAYLARI ÇEKME VE FİLTRELEME ---
 func get_detailed_user_data(user_id: int):
 	await get_tree().create_timer(0.6).timeout
 	var http_request = HTTPRequest.new()
@@ -118,31 +111,20 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 		var is_discovery_student = false
 		var pool_status = "pending" 
 		
-		# 1. Havuz Durumu ve Cursus Tespiti
 		for cursus in json["cursus_users"]:
 			var c_name = str(cursus["cursus"]["name"])
-			
-			if "discovery" in c_name.to_lower():
-				is_discovery_student = true
-				
-			if c_name == "42cursus":
-				is_core_student = true
-				
+			if "discovery" in c_name.to_lower(): is_discovery_student = true
+			if c_name == "42cursus": is_core_student = true
 			if c_name == "C Piscine":
 				has_c_piscine = true
 				if cursus.has("grade") and cursus["grade"] != null:
 					var grade_str = str(cursus["grade"]).strip_edges()
-					if grade_str == "Passed":
-						pool_status = "passed"
-					elif grade_str != "":
-						pool_status = "failed"
+					if grade_str == "Passed": pool_status = "passed"
+					elif grade_str != "": pool_status = "failed"
 		
-		if is_core_student:
-			pool_status = "passed"
+		if is_core_student: pool_status = "passed"
 			
-		# SIKI YÖNETİM FİLTRESİ: Discovery, Pending veya Havuzsuz olanları reddet
 		if not has_c_piscine or pool_status == "pending" or is_discovery_student:
-			print("AYIKLANDI: Discovery veya sonucu belirsiz öğrenci atlandı -> ", json["login"])
 			get_random_user()
 			return
 			
@@ -150,59 +132,37 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 		
 		var projeler_listesi = []
 		var sinavlar_listesi = []
-		
-		# 2. Proje ve Sınav Ayıklama
 		if json.has("projects_users"):
 			for p in json["projects_users"]:
 				var is_piscine_project = false
-				
 				if p.has("cursus_ids"):
 					for cid in p["cursus_ids"]:
-						if int(cid) == 9:
-							is_piscine_project = true
-							break
-				
+						if int(cid) == 9: is_piscine_project = true
 				if not is_piscine_project and p.has("project") and p["project"].has("slug"):
 					var p_slug = str(p["project"]["slug"]).to_lower()
-					if "piscine" in p_slug and not "discovery" in p_slug:
-						is_piscine_project = true
+					if "piscine" in p_slug and not "discovery" in p_slug: is_piscine_project = true
 
 				if is_piscine_project:
 					var p_name = str(p["project"]["name"])
-					
-					# Çift Güvenlik: Proje isminde discovery varsa atla
-					if "discovery" in p_name.to_lower():
-						continue
-						
+					if "discovery" in p_name.to_lower(): continue
 					var p_mark = str(p["final_mark"]) if p["final_mark"] != null else "0"
 					var entry = p_name + ": " + p_mark
-					
-					if p_name.to_lower().find("exam") != -1:
-						sinavlar_listesi.append(entry)
-					else:
-						projeler_listesi.append(entry)
+					if p_name.to_lower().find("exam") != -1: sinavlar_listesi.append(entry)
+					else: projeler_listesi.append(entry)
 						
-		var project_text = "\n".join(projeler_listesi) if projeler_listesi.size() > 0 else "Proje teslimi yok."
-		var exam_text = "\n".join(sinavlar_listesi) if sinavlar_listesi.size() > 0 else "Sınav kaydı yok."
-			
 		var student_data = {
 			"isim": json["login"],
+			"tam_isim": json.get("displayname", "Bilinmiyor"), # YENİ: Tam isim eklendi
 			"campus": campus_name,
 			"pool_status": pool_status,
-			"projeler": project_text,
-			"sinavlar": exam_text,
+			"projeler": "\n".join(projeler_listesi),
+			"sinavlar": "\n".join(sinavlar_listesi),
 			"feedback": ""
 		}
-		
 		get_user_feedbacks(user_id, student_data)
-		
-	elif response_code == 429:
-		await get_tree().create_timer(2.0).timeout
-		get_detailed_user_data(user_id)
 	else:
 		get_random_user()
 
-# --- 4. AŞAMA: FEEDBACKLERİ ÇEKME ---
 func get_user_feedbacks(user_id: int, student_data: Dictionary):
 	await get_tree().create_timer(0.6).timeout
 	var http_request = HTTPRequest.new()
@@ -216,33 +176,20 @@ func get_user_feedbacks(user_id: int, student_data: Dictionary):
 
 func _on_feedbacks_completed(_result, response_code, _headers, body, http_request, student_data: Dictionary, user_id: int):
 	http_request.queue_free()
-	
 	if response_code == 200:
 		var json = JSON.parse_string(body.get_string_from_utf8())
 		var feedback_text = ""
-		
 		if typeof(json) == TYPE_ARRAY and json.size() > 0:
 			for item in json:
 				if item.has("comment") and item["comment"] != null:
-					var clean_comment = str(item["comment"]).replace("\n", " ").strip_edges()
-					if clean_comment.length() > 65:
-						clean_comment = clean_comment.left(60) + "..."
-					feedback_text += "- " + clean_comment + "\n\n"
+					var clean = str(item["comment"]).replace("\n", " ").strip_edges()
+					if clean.length() > 65: clean = clean.left(60) + "..."
+					feedback_text += "- " + clean + "\n\n"
 					
-		if feedback_text == "": feedback_text = "Yorumsuz değerlendirmeler."
-		student_data["feedback"] = feedback_text
-		
+		student_data["feedback"] = feedback_text if feedback_text != "" else "Yorumsuz değerlendirmeler."
 		student_pool.append(student_data)
 		save_current_pool()
-		pool_updated.emit()
-		
-		if student_pool.size() == initial_target:
-			initial_fetch_done.emit()
-			
+		if student_pool.size() == initial_target: initial_fetch_done.emit()
 		get_random_user()
-		
-	elif response_code == 429:
-		await get_tree().create_timer(2.0).timeout
-		get_user_feedbacks(user_id, student_data)
 	else:
 		get_random_user()
