@@ -1,2 +1,4 @@
-res://node_2d.tscn::af312a8870512b66089a70defb562d15::1778924218::res://.godot/exported/133200997/export-362256a061aa8890e9a1e558b11e5ec3-node_2d.scn
-res://sceens/game_manager.tscn::eca0b99680c76fbbcd4d2eaab37bb2bd::1778932698::res://.godot/exported/133200997/export-8f21c6d2053ecd4c690c4b8e4d2cfb39-game_manager.scn
+res://scenes/game_manager.tscn::9091a63b41b1067887df8041a0d29bf0::1778945028::res://.godot/exported/133200997/export-18773aed85e32f6f60d8a5aa586802e3-game_manager.scn
+res://scenes/node_2d.tscn::26072c015ff547e0cd282897c28bc197::1778944261::res://.godot/exported/133200997/export-7936cb3314e92baa208a95fc6f151298-node_2d.scn
+res://scenes/loading_screen.tscn::5b7aa4a2afbb19734e47ba12504093bc::1778944763::res://.godot/exported/133200997/export-1e707b022a70ca8796c92eea804c0b29-loading_screen.scn
+res://scenes/MainWorld.tscn::33b22cd2c5132a75bda959d7401a682e::1778944271::res://.godot/exported/133200997/export-82f3dcba764dab093c0280b2d23e9752-MainWorld.scn

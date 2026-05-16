@@ -1,2 +1,3 @@
-res://scenes/MainWorld.tscn
-res://script/mainworld.gd
+res://scenes/loading_screen.tscn
+res://script/loading_screen.gd
+res://scenes/game_manager.tscn

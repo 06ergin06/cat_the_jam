@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cf5k6rnk0ghf6"]
+
+[ext_resource type="Script" uid="uid://blo3ykjnc05di" path="res://script/loading_screen.gd" id="1_ep5rh"]
+
+[node name="LoadingScreen" type="Control" unique_id=1177398971]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ep5rh")
+
+[node name="Label" type="Label" parent="." unique_id=1578994301]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "loading"

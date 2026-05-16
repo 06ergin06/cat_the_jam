@@ -1,12 +1,13 @@
+CollisionShape2D
 Node2D
 CanvasLayer
 Node
 Camera2D
 Camera3D
+Control
 Label
 TextureRect
 PanelContainer
-Control
 Button
 HBoxContainer
 VBoxContainer
