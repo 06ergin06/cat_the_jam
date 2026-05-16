@@ -1,11 +1,8 @@
 extends Node2D
 
 @onready var camera = $PlayerCamera
-
-# DÜZELTİLDİ: İç içe olan Table düğümünün doğru yolu!
 @onready var masa_alani = $Table/Table 
 
-# Butonlar zaten bu sahnedeymiş, yolları doğru!
 @onready var karar_paneli = $TextUI/Answerbox
 @onready var btn_gecti = $TextUI/Answerbox/BtnOk
 @onready var btn_kaldi = $TextUI/Answerbox/BtnNo
@@ -25,14 +22,16 @@ func _ready():
 	camera.position.y = CAMERA_YUKARI_Y
 	set_masa_etkilesimi(false)
 	
-	# Butonları kendi sahnesinden bağlıyoruz
 	btn_gecti.pressed.connect(_on_btn_gecti_pressed)
 	btn_kaldi.pressed.connect(_on_btn_kaldi_pressed)
 	
-	if Global.load_pool_from_disk():
+	# Eğer arka plan zaten veri çekmişse oyunu başlat
+	if Global.student_pool.size() >= Global.initial_target:
+		start_game()
+	elif Global.load_pool_from_disk(): # Diskten okumayı dene
 		start_game()
 	else:
-		print("HATA: Dosya bulunamadı! Loading ekranına dönülüyor...")
+		# Hiç veri yoksa mecbur loading'e git
 		get_tree().change_scene_to_file("res://scenes/loading_screen.tscn")
 
 func _input(event):
@@ -78,26 +77,37 @@ func yeni_ogrenci_geldi():
 	
 	var gercek_veri = Global.get_next_student()
 	
-	# Arka plan o kadar hızlı çalışacak ki buraya girmesi neredeyse imkansız
 	if gercek_veri == null:
-		print("PANİK MODU: Oyuncu çok hızlı oynadı, arka plan yetişemedi. Bekleniyor...")
-		# Geçici bir yazı yazdırabilir veya 1 saniye sonra bu fonksiyonu tekrar çağırabilirsin
-		await get_tree().create_timer(1.5).timeout
+		print("PANİK MODU: Arka plan yetişemedi! Sistem zorla uyandırılıyor...")
+		
+		# --- ŞOK CİHAZI BURASI ---
+		# Eğer Global "ben şu an veri çekiyorum" (is_fetching = true) diyerek yalan söylüyor 
+		# ve takılı kalmışsa, o durumu zorla iptal edip baştan başlatıyoruz.
+		Global.is_fetching = false 
+		Global.check_and_fill_buffer()
+		
+		await get_tree().create_timer(2.0).timeout
 		yeni_ogrenci_geldi()
 		return
 	
-	var ogrenci_gecti_mi = (gercek_veri["pool_status"] == "passed")
+	print("DEBBUG LOG | Havuzdan Çekilen Ham Veri: ", gercek_veri)
+	
+	var ogrenci_gecti_mi = (gercek_veri.get("pool_status", "unknown") == "passed")
 	
 	current_student = {
-		"isim": gercek_veri["login"],
-		"level": "Kampüs: " + gercek_veri["campus"],
+		"isim": gercek_veri.get("isim", "Bilinmiyor"),
+		"level": gercek_veri.get("campus", "Bilinmiyor"),
 		"passed": ogrenci_gecti_mi,
-		"projeler": "Core Eğitimi: " + ("Geçti" if gercek_veri["is_core"] else "Hayır"),
-		"feedback": "Havuz Durumu: " + gercek_veri["pool_status"].capitalize()
+		"projeler": gercek_veri.get("projeler", "Proje verisi eksik."),
+		"sinavlar": gercek_veri.get("sinavlar", "Sınav verisi eksik."),
+		"feedback": gercek_veri.get("feedback", "Feedback verisi eksik.")
 	}
 	
 	if masa_alani.has_method("update_cards"):
 		masa_alani.update_cards(current_student)
+	else:
+		print("KRİTİK HATA: Table objesinde 'update_cards' fonksiyonu yok!")
+
 func _on_btn_gecti_pressed():
 	karar_kontrol(true)
 

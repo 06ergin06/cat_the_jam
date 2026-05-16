@@ -56,11 +56,22 @@ layout_mode = 2
 
 [node name="LogCard" type="PanelContainer" parent="Cards" unique_id=780400908]
 layout_mode = 0
-offset_left = 495.0
-offset_top = 330.0
-offset_right = 624.0
-offset_bottom = 463.0
+offset_left = 693.0
+offset_top = -77.0
+offset_right = 822.0
+offset_bottom = 56.0
 script = ExtResource("4_d5upp")
 
 [node name="Label" type="Label" parent="Cards/LogCard" unique_id=389276447]
+layout_mode = 2
+
+[node name="ExamCard" type="PanelContainer" parent="Cards" unique_id=1056401040]
+layout_mode = 0
+offset_left = 125.0
+offset_top = -44.0
+offset_right = 254.0
+offset_bottom = 89.0
+script = ExtResource("4_d5upp")
+
+[node name="Label" type="Label" parent="Cards/ExamCard" unique_id=2056538166]
 layout_mode = 2

@@ -9,22 +9,15 @@ var access_token = ""
 var student_pool = []
 var is_fetching = false
 
-# Ayarlar
-var initial_target = 3       # Oyuna başlamak için gereken ilk sayı
-var max_buffer_size = 15     # Arka planda maksimum kaç kişi biriktirecek
+var initial_target = 3
+var max_buffer_size = 15
 
-# Sahneye haber vermek için sinyaller
 signal initial_fetch_done
 signal pool_updated
 
 func load_pool_from_disk():
 	if FileAccess.file_exists("user://pool_data.json"):
-		var file = FileAccess.open("user://pool_data.json", FileAccess.READ)
-		var data = JSON.parse_string(file.get_as_text())
-		file.close()
-		if typeof(data) == TYPE_ARRAY:
-			student_pool = data
-			return true
+		DirAccess.remove_absolute("user://pool_data.json")
 	return false
 
 func save_current_pool():
@@ -32,15 +25,15 @@ func save_current_pool():
 	file.store_string(JSON.stringify(student_pool, "\t"))
 	file.close()
 
-# Sıradaki öğrenciyi verir ve listeden siler
 func get_next_student():
+	# DÜZELTME: Havuz sıfır bile olsa HER ZAMAN arka planı dürt!
+	check_and_fill_buffer()
+	
 	if student_pool.size() > 0:
 		var student = student_pool.pop_front()
 		save_current_pool()
-		
-		# Oyuncu kartı çektiği an havuz kontrol edilir, azalmışsa arka planda doldurma tetiklenir
-		check_and_fill_buffer()
 		return student
+		
 	return null
 
 func check_and_fill_buffer():
@@ -48,11 +41,10 @@ func check_and_fill_buffer():
 		is_fetching = true
 		get_random_user()
 
-# --- API İŞLEMLERİ (ARKAPLANDA ÇALIŞIR) ---
-
 func get_access_token(code: String):
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
+	http_request.timeout = 8.0 # 8 Saniye içinde yanıt gelmezse iptal et
 	http_request.request_completed.connect(_on_token_received)
 	
 	var token_url = "https://api.intra.42.fr/oauth/token"
@@ -76,15 +68,14 @@ func get_random_user():
 		return
 		
 	await get_tree().create_timer(0.6).timeout 
-	
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
+	http_request.timeout = 8.0 # 8 Saniye içinde yanıt gelmezse iptal et
 	http_request.request_completed.connect(_on_random_list_completed.bind(http_request))
 	
 	var random_page = randi_range(1, 150)
 	var url = "https://api.intra.42.fr/v2/cursus/9/users?page[size]=50&page[number]=" + str(random_page)
 	var headers = ["Authorization: Bearer " + access_token]
-	
 	http_request.request(url, headers, HTTPClient.METHOD_GET)
 
 func _on_random_list_completed(_result, response_code, _headers, body, http_request):
@@ -103,13 +94,14 @@ func get_detailed_user_data(user_id: int):
 	await get_tree().create_timer(0.6).timeout
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
-	http_request.request_completed.connect(_on_detailed_data_completed.bind(http_request))
+	http_request.timeout = 8.0 # 8 Saniye içinde yanıt gelmezse iptal et
+	http_request.request_completed.connect(_on_detailed_data_completed.bind(http_request, user_id))
 	
 	var url = "https://api.intra.42.fr/v2/users/" + str(user_id)
 	var headers = ["Authorization: Bearer " + access_token]
 	http_request.request(url, headers, HTTPClient.METHOD_GET)
 
-func _on_detailed_data_completed(_result, response_code, _headers, body, http_request):
+func _on_detailed_data_completed(_result, response_code, _headers, body, http_request, user_id: int):
 	http_request.queue_free()
 	if response_code == 200:
 		var json = JSON.parse_string(body.get_string_from_utf8())
@@ -118,46 +110,110 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 			return
 			
 		var has_c_piscine = false
-		var is_core_student = false
 		var pool_status = "unknown"
-		var pool_finished = false
 		
 		for cursus in json["cursus_users"]:
-			if cursus["cursus"]["name"] == "42cursus": is_core_student = true
 			if cursus["cursus"]["name"] == "C Piscine":
 				has_c_piscine = true
 				if cursus.has("end_at") and cursus["end_at"] != null:
-					pool_finished = true
-					if cursus.has("grade"):
-						match cursus["grade"]:
-							"Passed": pool_status = "passed"
-							"Failed": pool_status = "failed"
-							_: pool_status = "completed_unknown"
+					if cursus.has("grade") and cursus["grade"] == "Passed":
+						pool_status = "passed"
+					else:
+						pool_status = "failed"
 		
 		if not has_c_piscine:
 			get_random_user()
 			return
 			
 		var campus_name = json["campus"][0]["name"] if json.has("campus") and json["campus"].size() > 0 else "Bilinmiyor"
-		if is_core_student and pool_status == "completed_unknown": pool_status = "passed"
+		
+		var projeler_listesi = []
+		var sinavlar_listesi = []
+		
+		if json.has("projects_users"):
+			for p in json["projects_users"]:
+				var is_piscine_project = false
+				
+				if p.has("cursus_ids"):
+					for cid in p["cursus_ids"]:
+						if int(cid) == 9:
+							is_piscine_project = true
+							break
+				
+				if not is_piscine_project and p.has("project") and p["project"].has("slug"):
+					if "piscine" in str(p["project"]["slug"]).to_lower():
+						is_piscine_project = true
+
+				if is_piscine_project:
+					var p_name = str(p["project"]["name"])
+					var p_mark = str(p["final_mark"]) if p["final_mark"] != null else "0"
+					var entry = p_name + ": " + p_mark
+					
+					if p_name.to_lower().find("exam") != -1:
+						sinavlar_listesi.append(entry)
+					else:
+						projeler_listesi.append(entry)
+						
+		var project_text = "\n".join(projeler_listesi) if projeler_listesi.size() > 0 else "Proje teslimi yok."
+		var exam_text = "\n".join(sinavlar_listesi) if sinavlar_listesi.size() > 0 else "Sınav kaydı yok."
 			
 		var student_data = {
-			"login": json["login"],
+			"isim": json["login"],
 			"campus": campus_name,
-			"is_core": is_core_student,
 			"pool_status": pool_status,
-			"pool_finished": pool_finished
+			"projeler": project_text,
+			"sinavlar": exam_text,
+			"feedback": ""
 		}
+		
+		get_user_feedbacks(user_id, student_data)
+		
+	elif response_code == 429:
+		await get_tree().create_timer(2.0).timeout
+		get_detailed_user_data(user_id)
+	else:
+		get_random_user()
+
+func get_user_feedbacks(user_id: int, student_data: Dictionary):
+	await get_tree().create_timer(0.6).timeout
+	var http_request = HTTPRequest.new()
+	add_child(http_request)
+	http_request.timeout = 8.0 # 8 Saniye içinde yanıt gelmezse iptal et
+	http_request.request_completed.connect(_on_feedbacks_completed.bind(http_request, student_data, user_id))
+	
+	var url = "https://api.intra.42.fr/v2/users/" + str(user_id) + "/scale_teams/as_corrected?sort=-created_at&page[size]=3"
+	var headers = ["Authorization: Bearer " + access_token]
+	http_request.request(url, headers, HTTPClient.METHOD_GET)
+
+func _on_feedbacks_completed(_result, response_code, _headers, body, http_request, student_data: Dictionary, user_id: int):
+	http_request.queue_free()
+	
+	if response_code == 200:
+		var json = JSON.parse_string(body.get_string_from_utf8())
+		var feedback_text = ""
+		
+		if typeof(json) == TYPE_ARRAY and json.size() > 0:
+			for item in json:
+				if item.has("comment") and item["comment"] != null:
+					var clean_comment = str(item["comment"]).replace("\n", " ").strip_edges()
+					if clean_comment.length() > 65:
+						clean_comment = clean_comment.left(60) + "..."
+					feedback_text += "- " + clean_comment + "\n\n"
+					
+		if feedback_text == "": feedback_text = "Yorumsuz değerlendirmeler."
+		student_data["feedback"] = feedback_text
 		
 		student_pool.append(student_data)
 		save_current_pool()
 		pool_updated.emit()
 		
-		# OYUNA GEÇİŞ TETİKLEYİCİSİ: İlk defa 3 kişiye ulaştığımız an yükleme ekranına geç sinyali veriyoruz
 		if student_pool.size() == initial_target:
 			initial_fetch_done.emit()
 			
-		# Durmaksızın arka planda max_buffer_size (15) olana kadar çekmeye devam et
 		get_random_user()
+		
+	elif response_code == 429:
+		await get_tree().create_timer(2.0).timeout
+		get_user_feedbacks(user_id, student_data)
 	else:
 		get_random_user()
