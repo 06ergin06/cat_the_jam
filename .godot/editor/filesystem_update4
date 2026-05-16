@@ -1,2 +1,2 @@
-res://sceens/game_manager.tscn
-res://script/game_manager.gd
+res://scenes/MainWorld.tscn
+res://script/mainworld.gd

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://c3upxmmynfhnl"]
+
+[ext_resource type="Script" uid="uid://310e2gp40syr" path="res://script/mainworld.gd" id="1_78anr"]
+[ext_resource type="PackedScene" uid="uid://hmw4xw8thjs5" path="res://scenes/game_manager.tscn" id="1_nsf4n"]
+
+[node name="MainWorld" type="Node2D" unique_id=1776388874]
+script = ExtResource("1_78anr")
+
+[node name="PlayerCamera" type="Camera2D" parent="." unique_id=1735206410]
+anchor_mode = 0
+
+[node name="NPC" type="Node" parent="." unique_id=2142253152]
+
+[node name="Table" type="Node2D" parent="." unique_id=1753024674]
+position = Vector2(0, 1080)
+
+[node name="GameManager" parent="Table" unique_id=315808563 instance=ExtResource("1_nsf4n")]
