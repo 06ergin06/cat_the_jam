@@ -27,7 +27,15 @@ visible = false
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
-text = "get student"
+text = "get s"
+
+[node name="LogPanel" type="TextEdit" parent="." unique_id=1473714736]
+layout_mode = 0
+offset_left = 347.0
+offset_top = 126.0
+offset_right = 1117.0
+offset_bottom = 499.0
+editable = false
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="NextStudentButton" to="." method="_on_next_student_button_pressed"]
