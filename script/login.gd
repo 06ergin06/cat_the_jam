@@ -20,7 +20,7 @@ func check_for_auth_code():
 	var raw_query = JavaScriptBridge.eval("window.location.search")
 	var search_query = str(raw_query)
 	
-	# URL'de "code=" varsa güvenli bir şekilde parçala (ÇÖKMEYİ ENGELLEYEN KISIM)
+	# URL'de "code=" varsa güvenli bir şekilde parçala
 	if "code=" in search_query:
 		var auth_code = ""
 		var params = search_query.replace("?", "").split("&")
@@ -36,8 +36,6 @@ func check_for_auth_code():
 			
 			# F5 ile sayfa yenilenirse aynı kodla patlamamak için URL'yi temizle
 			JavaScriptBridge.eval("window.history.replaceState({}, document.title, window.location.pathname);")
-			
-			# Loading sahnesine geç (Senin klasör yapına uygun)
 			get_tree().call_deferred("change_scene_to_file", "res://scenes/loading_screen.tscn")
 		else:
 			print("HATA: URL'de code parametresi var ama içi boş!")
