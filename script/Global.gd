@@ -12,8 +12,31 @@ var is_fetching = false
 var initial_target = 3
 var max_buffer_size = 15
 
+var master_volume: float = 1.0
+var settings_path = "user://game_settings.cfg" # Ayarların tutulacağı dosya
+
 signal initial_fetch_done
 signal pool_updated
+
+func _ready():
+	# Oyun açıldığında veya sayfa yenilendiğinde ayarları yükle
+	load_audio_settings()
+
+# --- SES KAYIT VE YÜKLEME SİSTEMİ ---
+func load_audio_settings():
+	var config = ConfigFile.new()
+	if config.load(settings_path) == OK:
+		master_volume = config.get_value("Audio", "volume", 1.0)
+		
+	var bus_index = AudioServer.get_bus_index("Master")
+	AudioServer.set_bus_volume_db(bus_index, linear_to_db(master_volume))
+
+func save_audio_settings(yeni_deger: float):
+	master_volume = yeni_deger
+	var config = ConfigFile.new()
+	config.set_value("Audio", "volume", master_volume)
+	config.save(settings_path)
+# -----------------------------------
 
 func load_pool_from_disk():
 	if FileAccess.file_exists("user://pool_data.json"):
@@ -146,12 +169,9 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 					var p_name = str(p["project"]["name"])
 					if "discovery" in p_name.to_lower(): continue
 					
-					# --- GÜNCELLENEN KISIM BURASI ---
-					# Not null değilse önce int'e (tam sayıya) çevir, sonra metin yap
 					var p_mark = "0"
 					if p["final_mark"] != null:
 						p_mark = str(int(p["final_mark"])) 
-					# --------------------------------
 					
 					var entry = p_name + ": " + p_mark
 					if p_name.to_lower().find("exam") != -1: sinavlar_listesi.append(entry)
