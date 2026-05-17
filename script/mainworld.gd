@@ -170,7 +170,7 @@ func _on_btn_popup_restart_pressed():
 
 func update_score_ui():
 	if score_label:
-		score_label.text = "Point: " + str(score)
+		score_label.text = str(score)
 
 func set_masa_etkilesimi(active: bool):
 	if masa_alani is Control:
