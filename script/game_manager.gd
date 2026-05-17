@@ -4,9 +4,8 @@ extends Control
 @onready var feedback_card = $Cards/LogCard
 
 # --- ARAYÜZ ELEMANLARI (TextUI'ın Table içinde olduğu varsayımıyla) ---
-@onready var karar_paneli = $TextUI/Answerbox
-@onready var btn_gecti = $TextUI/Answerbox/BtnOk
-@onready var btn_kaldi = $TextUI/Answerbox/BtnNo
+@onready var btn_gecti = $TextUI/BtnOk
+@onready var btn_kaldi = $TextUI/BtnNo
 @onready var score_label = $TextUI/ScoreLabel
 @onready var btn_exit_to_login = $TextUI/BtnExitToLogin
 
@@ -49,7 +48,6 @@ func start_game():
 
 func yeni_ogrenci_geldi():
 	oyun_bitti_mi = false 
-	karar_paneli.hide()
 	
 	var gercek_veri = Global.get_next_student()
 	
@@ -64,8 +62,6 @@ func yeni_ogrenci_geldi():
 	if game_over_popup:
 		game_over_popup.hide()
 		
-	# Artık kamera inmesi olmadığı için veriler hazır olunca butonları direkt gösteriyoruz
-	karar_paneli.show() 
 	
 	var ogrenci_gecti_mi = (gercek_veri.get("pool_status", "unknown") == "passed")
 	
@@ -108,8 +104,6 @@ func _on_btn_kaldi_pressed():
 
 func karar_kontrol(oyuncu_karari: bool):
 	print("Oyuncu Kararı: ", oyuncu_karari, " | Gerçek Durum: ", current_student["passed"])
-	
-	karar_paneli.hide() # Karar anında butonları gizle
 	
 	var dogru_mu = (oyuncu_karari == current_student["passed"])
 	
