@@ -8,6 +8,8 @@ func _ready():
 	if OS.has_feature("web"):
 		await get_tree().create_timer(0.5).timeout
 		check_for_auth_code()
+	if has_node("HSlider"):
+		$HSlider.value = db_to_linear(GlobalMusic.volume_db)
 
 func _on_button_pressed():
 	var url = AUTH_URL % [CLIENT_ID, REDIRECT_URI]
@@ -41,3 +43,7 @@ func check_for_auth_code():
 			print("HATA: URL'de code parametresi var ama içi boş!")
 	else:
 		print("URL temiz, giriş yapılması bekleniyor...")
+
+
+func _on_h_slider_value_changed(value: float):
+	GlobalMusic.volume_db = linear_to_db(value)

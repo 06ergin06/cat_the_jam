@@ -60,4 +60,14 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Play"
 
+[node name="HSlider" type="HSlider" parent="PanelContainer/VBoxContainer" unique_id=1238606587]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 0.001
+max_value = 1.0
+step = 0.1
+value = 0.501
+
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/HSlider" to="." method="_on_h_slider_value_changed"]
