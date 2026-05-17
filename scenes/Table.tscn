@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://hmw4xw8thjs5"]
 
 [ext_resource type="Script" uid="uid://bpfk4tbeukwpa" path="res://script/game_manager.gd" id="1_70yv6"]
-[ext_resource type="Texture2D" uid="uid://ddio6m77qm4o8" path="res://assets/images.jpg" id="2_o2178"]
+[ext_resource type="Texture2D" uid="uid://ts1gs8hjlitn" path="res://assets/Your paragraph text(1).png" id="2_7e6ia"]
 [ext_resource type="PackedScene" uid="uid://b381omk65jj26" path="res://scenes/Book.tscn" id="4_7e6ia"]
 [ext_resource type="Script" uid="uid://b2fo6p3pioxt6" path="res://script/card_sc.gd" id="4_d5upp"]
 
@@ -15,12 +15,20 @@ grow_vertical = 2
 script = ExtResource("1_70yv6")
 
 [node name="BackGround" type="TextureRect" parent="." unique_id=304831816]
-layout_mode = 0
-offset_left = -23.0
-offset_top = -2.0
-offset_right = 1917.0
-offset_bottom = 1085.0
-texture = ExtResource("2_o2178")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.25
+offset_top = -590.0
+offset_right = 960.25
+offset_bottom = 590.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_7e6ia")
+expand_mode = 1
 
 [node name="Cards" type="Control" parent="." unique_id=50886936]
 anchors_preset = 0
@@ -42,4 +50,4 @@ layout_mode = 2
 
 [node name="BookArea" parent="." unique_id=905941486 instance=ExtResource("4_7e6ia")]
 unique_name_in_owner = true
-position = Vector2(749, 381)
+position = Vector2(456, 287)

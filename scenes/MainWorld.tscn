@@ -5,10 +5,9 @@
 [ext_resource type="FontVariation" uid="uid://dcvaiuhhp22gt" path="res://font.tres" id="3_sdt8g"]
 [ext_resource type="Texture2D" uid="uid://cegayvutskrly" path="res://assets/Frame 1.png" id="4_jh0ie"]
 [ext_resource type="Texture2D" uid="uid://d5sstduxg5mn" path="res://assets/Frame 2.png" id="5_kvhdw"]
-[ext_resource type="Script" path="res://script/btn.gd" id="5_sj18y"]
+[ext_resource type="Script" uid="uid://c4rlnd0bli0py" path="res://script/btn.gd" id="5_sj18y"]
 [ext_resource type="Texture2D" uid="uid://c6emseh2l4khw" path="res://assets/score.png" id="7_krl21"]
-[ext_resource type="Texture2D" uid="uid://cjpeaoodi6du0" path="res://assets/Untitled design.png" id="7_sj18y"]
-[ext_resource type="Texture2D" uid="uid://cvmx20nsldapp" path="res://assets/Untitled design(1).png" id="9_krl21"]
+[ext_resource type="Texture2D" uid="uid://d0grasl6np2cj" path="res://assets/Your paragraph text(3).png" id="8_mtt3w"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqahb"]
 content_margin_left = 4.0
@@ -49,11 +48,11 @@ Label/fonts/font = ExtResource("3_sdt8g")
 Label/styles/focus = SubResource("StyleBoxFlat_iqahb")
 Label/styles/normal = SubResource("StyleBoxEmpty_jh0ie")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fcpm2"]
-texture = ExtResource("7_krl21")
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mtt3w"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_krl21"]
+load_path = "res://.godot/imported/Untitled design(1).png-ebe870db70627436be2e39483df032e5.ctex"
 
 [node name="MainWorld" type="Node2D" unique_id=1776388874]
 script = ExtResource("1_78anr")
@@ -67,6 +66,10 @@ anchor_mode = 0
 position = Vector2(0, 1080)
 
 [node name="Table" parent="Table" unique_id=315808563 instance=ExtResource("1_nsf4n")]
+offset_left = 932.0
+offset_top = 490.0
+offset_right = 932.0
+offset_bottom = 490.0
 theme = SubResource("Theme_kvhdw")
 
 [node name="TextUI" type="CanvasLayer" parent="." unique_id=2084972072]
@@ -106,12 +109,24 @@ script = ExtResource("5_sj18y")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -91.0
-offset_right = 91.0
-offset_bottom = 121.0
+offset_left = -26.0
+offset_top = 32.0
+offset_right = 25.0
+offset_bottom = 74.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxTexture_fcpm2")
+
+[node name="score" type="TextureRect" parent="TextUI" unique_id=1605932436]
+z_index = -1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.52072
+offset_right = 80.52072
+offset_bottom = 126.0
+grow_horizontal = 2
+texture = ExtResource("7_krl21")
+expand_mode = 1
 
 [node name="GameOverPopup" type="Panel" parent="TextUI" unique_id=79900368]
 custom_minimum_size = Vector2(400, 300)
@@ -131,23 +146,26 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_mtt3w")
 [node name="TextureRect" type="TextureRect" parent="TextUI/GameOverPopup" unique_id=589294289]
 z_index = -1
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.052
-anchor_top = 0.238
-anchor_right = 0.96400005
-anchor_bottom = 0.78400004
-offset_left = -1002.8
-offset_top = -783.4
-offset_right = 1081.4
-offset_bottom = 844.8
-texture = ExtResource("7_sj18y")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -271.51904
+offset_top = -280.74875
+offset_right = 271.51904
+offset_bottom = 280.74875
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_mtt3w")
+expand_mode = 1
 
 [node name="BtnPopupProfile" type="Button" parent="TextUI/GameOverPopup" unique_id=1286361922]
 layout_mode = 0
-offset_left = 152.0
-offset_top = 193.0
-offset_right = 276.0
-offset_bottom = 245.0
+offset_left = 134.0
+offset_top = 162.0
+offset_right = 258.0
+offset_bottom = 214.0
 theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
 theme_override_font_sizes/font_size = 30
 text = "intra profile"
@@ -156,10 +174,10 @@ script = ExtResource("5_sj18y")
 
 [node name="BtnPopupRestart" type="Button" parent="TextUI/GameOverPopup" unique_id=726355432]
 layout_mode = 0
-offset_left = 171.0
-offset_top = 156.0
-offset_right = 253.0
-offset_bottom = 208.0
+offset_left = 151.0
+offset_top = 128.0
+offset_right = 233.0
+offset_bottom = 180.0
 theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
 theme_override_font_sizes/font_size = 30
 text = "Restart"
@@ -168,10 +186,10 @@ script = ExtResource("5_sj18y")
 
 [node name="Label" type="Label" parent="TextUI/GameOverPopup" unique_id=1947154143]
 layout_mode = 0
-offset_left = 80.0
-offset_top = 92.0
-offset_right = 365.0
-offset_bottom = 180.0
+offset_left = 69.0
+offset_top = 53.0
+offset_right = 354.0
+offset_bottom = 141.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "GAME OVER"
@@ -186,6 +204,6 @@ offset_left = 1672.0
 offset_top = -56.0
 offset_right = 1979.7433
 offset_bottom = 175.0
-icon = ExtResource("9_krl21")
+icon = SubResource("CompressedTexture2D_krl21")
 flat = true
 expand_icon = true
