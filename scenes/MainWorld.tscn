@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://310e2gp40syr" path="res://script/mainworld.gd" id="1_78anr"]
 [ext_resource type="PackedScene" uid="uid://hmw4xw8thjs5" path="res://scenes/Table.tscn" id="1_nsf4n"]
 [ext_resource type="FontVariation" uid="uid://dcvaiuhhp22gt" path="res://font.tres" id="3_sdt8g"]
+[ext_resource type="Texture2D" uid="uid://cegayvutskrly" path="res://assets/Frame 1.png" id="4_jh0ie"]
+[ext_resource type="Texture2D" uid="uid://d5sstduxg5mn" path="res://assets/Frame 2.png" id="5_kvhdw"]
+[ext_resource type="Script" uid="uid://c4rlnd0bli0py" path="res://script/btn.gd" id="5_sj18y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqahb"]
 content_margin_left = 4.0
@@ -65,29 +68,42 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -92.0
-offset_bottom = 92.0
+offset_left = -201.0
+offset_top = -65.0
+offset_right = -1.0
+offset_bottom = 119.0
 grow_horizontal = 0
 grow_vertical = 2
 
 [node name="BtnOk" type="Button" parent="TextUI/Answerbox" unique_id=278464143]
 custom_minimum_size = Vector2(200, 90)
 layout_mode = 2
-text = "Geçtin"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+icon = ExtResource("4_jh0ie")
+flat = true
+expand_icon = true
+script = ExtResource("5_sj18y")
 
-[node name="BtnNo" type="Button" parent="TextUI/Answerbox" unique_id=1123886421]
+[node name="BtnNo" type="Button" parent="TextUI/Answerbox" unique_id=1454864417]
 custom_minimum_size = Vector2(200, 90)
 layout_mode = 2
-text = "Kaldın"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+icon = ExtResource("5_kvhdw")
+flat = true
+expand_icon = true
+script = ExtResource("5_sj18y")
 
 [node name="ScoreLabel" type="Label" parent="TextUI" unique_id=1161366406]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 23.0
+visibility_layer = 2
+anchors_preset = -1
+anchor_left = 0.509
+anchor_top = 0.057000004
+anchor_right = 0.512
+anchor_bottom = 0.058000002
+offset_left = -51.28003
+offset_top = -28.560005
+offset_right = 48.95996
+offset_bottom = 27.359997
 grow_horizontal = 2
 
 [node name="GameOverPopup" type="Panel" parent="TextUI" unique_id=79900368]
@@ -97,8 +113,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -100.0
-offset_right = 100.0
+offset_left = -149.0
+offset_top = -129.0
+offset_right = 251.0
+offset_bottom = 171.0
 grow_horizontal = 2
 grow_vertical = 2
 
