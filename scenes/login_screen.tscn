@@ -1,14 +1,11 @@
 [gd_scene format=3 uid="uid://ol7ent0knaci"]
 
 [ext_resource type="Script" uid="uid://djt4jrlybynqw" path="res://script/login.gd" id="1_wtcfe"]
-[ext_resource type="Texture2D" uid="uid://ccci8j1ncvuwv" path="res://image/Rectangle 1.png" id="2_4dvvg"]
+[ext_resource type="Texture2D" uid="uid://ccci8j1ncvuwv" path="res://assets/Rectangle 1.png" id="2_4dvvg"]
+[ext_resource type="Texture2D" uid="uid://c2hg4mwtnbidf" path="res://assets/dikey_parsomen.png" id="3_8q002"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rnjyy"]
-bg_color = Color(0.83137256, 0.7607843, 0.61960787, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mhqwn"]
+texture = ExtResource("3_8q002")
 
 [node name="Control" type="Control" unique_id=2028279815]
 layout_mode = 3
@@ -41,13 +38,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -250.0
-offset_right = 250.0
-offset_bottom = 250.0
+offset_left = -397.0
+offset_top = -277.5
+offset_right = 397.0
+offset_bottom = 277.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_rnjyy")
+theme_override_styles/panel = SubResource("StyleBoxTexture_mhqwn")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=2045743275]
 custom_minimum_size = Vector2(500, 500)
