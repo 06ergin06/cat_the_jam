@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dpxcbg8u2fkw3"]
+
+[ext_resource type="AudioStream" uid="uid://d0wdaeefyevtm" path="res://audio/Guilty Hurdy-Gurdy.mp3" id="1_p76w3"]
+
+[node name="GlobalMusic" type="AudioStreamPlayer" unique_id=816623291]
+stream = ExtResource("1_p76w3")
+volume_db = -20.0
+autoplay = true
