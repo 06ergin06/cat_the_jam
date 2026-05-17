@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bpfk4tbeukwpa" path="res://script/game_manager.gd" id="1_70yv6"]
 [ext_resource type="Texture2D" uid="uid://ddio6m77qm4o8" path="res://assets/images.jpg" id="2_o2178"]
+[ext_resource type="PackedScene" uid="uid://b381omk65jj26" path="res://scenes/Book.tscn" id="4_7e6ia"]
 [ext_resource type="Script" uid="uid://b2fo6p3pioxt6" path="res://script/card_sc.gd" id="4_d5upp"]
 
 [node name="Table" type="Control" unique_id=315808563]
@@ -28,50 +29,17 @@ offset_top = 212.0
 offset_right = 480.0
 offset_bottom = 252.0
 
-[node name="ProfileCard" type="PanelContainer" parent="Cards" unique_id=1063487361]
-layout_mode = 0
-offset_left = 819.0
-offset_top = 334.0
-offset_right = 979.0
-offset_bottom = 516.0
-script = ExtResource("4_d5upp")
-is_profile_card = true
-
-[node name="Label" type="Label" parent="Cards/ProfileCard" unique_id=729526182]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="Cards/ProfileCard" unique_id=28509464]
-layout_mode = 2
-
-[node name="ProjectCard" type="PanelContainer" parent="Cards" unique_id=1663074075]
-layout_mode = 0
-offset_left = 143.0
-offset_top = 327.0
-offset_right = 279.0
-offset_bottom = 484.0
-script = ExtResource("4_d5upp")
-
-[node name="Label" type="Label" parent="Cards/ProjectCard" unique_id=377187070]
-layout_mode = 2
-
 [node name="LogCard" type="PanelContainer" parent="Cards" unique_id=780400908]
 layout_mode = 0
-offset_left = 693.0
-offset_top = -77.0
-offset_right = 822.0
-offset_bottom = 56.0
+offset_left = 937.0
+offset_top = 45.0
+offset_right = 1066.0
+offset_bottom = 178.0
 script = ExtResource("4_d5upp")
 
 [node name="Label" type="Label" parent="Cards/LogCard" unique_id=389276447]
 layout_mode = 2
 
-[node name="ExamCard" type="PanelContainer" parent="Cards" unique_id=1056401040]
-layout_mode = 0
-offset_left = 125.0
-offset_top = -44.0
-offset_right = 254.0
-offset_bottom = 89.0
-script = ExtResource("4_d5upp")
-
-[node name="Label" type="Label" parent="Cards/ExamCard" unique_id=2056538166]
-layout_mode = 2
+[node name="BookArea" parent="." unique_id=905941486 instance=ExtResource("4_7e6ia")]
+unique_name_in_owner = true
+position = Vector2(749, 381)

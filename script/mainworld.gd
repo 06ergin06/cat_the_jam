@@ -9,7 +9,7 @@ extends Node2D
 @onready var btn_kaldi = $TextUI/Answerbox/BtnNo
 @onready var score_label = $TextUI/ScoreLabel
 
-# --- YENİ: GAME OVER POPUP ELEMANLARI ---
+# Game Over Popup Elemanları
 @onready var game_over_popup = $TextUI/GameOverPopup
 @onready var popup_text = $TextUI/GameOverPopup/PopupText
 @onready var btn_popup_profile = $TextUI/GameOverPopup/BtnPopupProfile
@@ -85,7 +85,7 @@ func yeni_ogrenci_geldi():
 	
 	var gercek_veri = Global.get_next_student()
 	
-	# Veri henüz gelmediyse Panik Modu çalışır (Ama masaya_bakildi değerini bozmaz!)
+	# Veri henüz gelmediyse Panik Modu çalışır
 	if gercek_veri == null:
 		print("PANİK MODU: Veri bekleniyor...")
 		Global.is_fetching = false 
@@ -93,8 +93,6 @@ func yeni_ogrenci_geldi():
 		await get_tree().create_timer(1.0).timeout
 		yeni_ogrenci_geldi()
 		return
-	
-	# --- VERİ BAŞARIYLA GELDİKTEN SONRA ÇALIŞACAK KISIM ---
 	
 	# Eğer oyuncu veri geldiği an masadaysa "bakıldı" say. Değilse "bakılmadı" de ki inmek zorunda kalsın.
 	masaya_bakildi = masa_acik_mi 
@@ -117,8 +115,12 @@ func yeni_ogrenci_geldi():
 		"feedback": gercek_veri.get("feedback", "Veri yok.")
 	}
 	
+	# Eski masa kartlarını güncelleme (İsteğe bağlı, o kartları tamamen kaldırdıysan bu 2 satırı silebilirsin)
 	if masa_alani.has_method("update_cards"):
 		masa_alani.update_cards(current_student)
+		
+	get_tree().call_group("kitap", "verileri_guncelle", current_student)
+	print("BAŞARILI: Veriler Grup sistemiyle kitaba ateşlendi!")
 
 func start_game():
 	score = 0
@@ -153,15 +155,14 @@ func karar_kontrol(oyuncu_karari: bool):
 		
 		popup_text.text = "YANLIŞ KARAR!\n(Bu öğrenci aslında %s)\n\nKullanıcı Adı: %s\nTam İsim: %s" % [gercek_durum, current_student["isim"], current_student["tam_isim"]]
 		
-		# Popup'ı ekranda göster
 		game_over_popup.show()
 
-# YENİ POPUP: INTRA LINKINI TARAYICIDA AÇMA
+# INTRA LINKINI TARAYICIDA AÇMA
 func _on_btn_popup_profile_pressed():
 	var url = "https://profile.intra.42.fr/users/" + current_student["isim"]
 	OS.shell_open(url)
 
-# YENİ POPUP: OYUNU BAŞTAN BAŞLATMA
+# OYUNU BAŞTAN BAŞLATMA
 func _on_btn_popup_restart_pressed():
 	yeni_ogrenci_geldi()
 

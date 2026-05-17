@@ -145,14 +145,21 @@ func _on_detailed_data_completed(_result, response_code, _headers, body, http_re
 				if is_piscine_project:
 					var p_name = str(p["project"]["name"])
 					if "discovery" in p_name.to_lower(): continue
-					var p_mark = str(p["final_mark"]) if p["final_mark"] != null else "0"
+					
+					# --- GÜNCELLENEN KISIM BURASI ---
+					# Not null değilse önce int'e (tam sayıya) çevir, sonra metin yap
+					var p_mark = "0"
+					if p["final_mark"] != null:
+						p_mark = str(int(p["final_mark"])) 
+					# --------------------------------
+					
 					var entry = p_name + ": " + p_mark
 					if p_name.to_lower().find("exam") != -1: sinavlar_listesi.append(entry)
 					else: projeler_listesi.append(entry)
 						
 		var student_data = {
 			"isim": json["login"],
-			"tam_isim": json.get("displayname", "Bilinmiyor"), # YENİ: Tam isim eklendi
+			"tam_isim": json.get("displayname", "Bilinmiyor"),
 			"campus": campus_name,
 			"pool_status": pool_status,
 			"projeler": "\n".join(projeler_listesi),

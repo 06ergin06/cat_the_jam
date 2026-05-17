@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b381omk65jj26"]
 
-[ext_resource type="Script" uid="uid://btlheaxuqi688" path="res://scenes/book.gd" id="1_ceoqc"]
+[ext_resource type="Script" uid="uid://btlheaxuqi688" path="res://script/book.gd" id="1_ceoqc"]
 [ext_resource type="Texture2D" uid="uid://11jpwecgki65" path="res://assets/open.png" id="1_pu0g8"]
 [ext_resource type="Texture2D" uid="uid://oxpqahnskjov" path="res://assets/close.png" id="2_yx52g"]
 
@@ -224,10 +224,20 @@ sprite_frames = SubResource("SpriteFrames_f6vt1")
 animation = &"opening"
 
 [node name="Label" type="Label" parent="." unique_id=555615077]
-offset_left = 13.0
+offset_left = 27.0
 offset_top = -87.0
-offset_right = 233.0
+offset_right = 247.0
 offset_bottom = 223.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Label"
+
+[node name="Label2" type="Label" parent="." unique_id=2118430555]
+offset_left = -234.0
+offset_top = -85.0
+offset_right = -14.0
+offset_bottom = 225.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Label 2"
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

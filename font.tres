@@ -11,3 +11,6 @@ base_font = ExtResource("1_4pged")
 [resource]
 fallbacks = Array[Font]([ExtResource("2_xofve"), ExtResource("3_uj225"), ExtResource("4_wloci")])
 base_font = SubResource("FontVariation_uj225")
+opentype_features = {
+1667329140: 0
+}
