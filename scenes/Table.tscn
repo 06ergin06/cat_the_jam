@@ -4,9 +4,19 @@
 [ext_resource type="Texture2D" uid="uid://ts1gs8hjlitn" path="res://assets/Your paragraph text(1).png" id="2_7e6ia"]
 [ext_resource type="PackedScene" uid="uid://b381omk65jj26" path="res://scenes/Book.tscn" id="4_7e6ia"]
 [ext_resource type="Script" uid="uid://b2fo6p3pioxt6" path="res://script/card_sc.gd" id="4_d5upp"]
+[ext_resource type="Texture2D" uid="uid://cegayvutskrly" path="res://assets/Frame 1.png" id="5_wj4jt"]
+[ext_resource type="Script" path="res://script/btn.gd" id="6_3fdej"]
+[ext_resource type="Texture2D" uid="uid://d5sstduxg5mn" path="res://assets/Frame 2.png" id="7_cxxql"]
+[ext_resource type="Texture2D" uid="uid://c6ele4sltwxkg" path="res://assets/Your paragraph text(4).png" id="9_vsju3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bogli"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jkutv"]
 
 [node name="Table" type="Control" unique_id=315808563]
 layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -40,3 +50,127 @@ script = ExtResource("4_d5upp")
 [node name="BookArea" parent="." unique_id=905941486 instance=ExtResource("4_7e6ia")]
 unique_name_in_owner = true
 position = Vector2(559, 379)
+
+[node name="TextUI" type="CanvasLayer" parent="." unique_id=1118087528]
+
+[node name="Answerbox" type="VBoxContainer" parent="TextUI" unique_id=2046915120]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -332.0
+offset_top = -67.0
+offset_right = -132.0
+offset_bottom = 117.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="BtnOk" type="Button" parent="TextUI/Answerbox" unique_id=534334698]
+custom_minimum_size = Vector2(200, 90)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+icon = ExtResource("5_wj4jt")
+flat = true
+expand_icon = true
+script = ExtResource("6_3fdej")
+
+[node name="BtnNo" type="Button" parent="TextUI/Answerbox" unique_id=919088398]
+custom_minimum_size = Vector2(200, 90)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+icon = ExtResource("7_cxxql")
+flat = true
+expand_icon = true
+script = ExtResource("6_3fdej")
+
+[node name="ScoreLabel" type="Label" parent="TextUI" unique_id=1326133594]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -26.0
+offset_top = 32.0
+offset_right = 25.0
+offset_bottom = 74.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="GameOverPopup" type="Panel" parent="TextUI" unique_id=972294087]
+custom_minimum_size = Vector2(400, 300)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -149.0
+offset_top = -129.0
+offset_right = 251.0
+offset_bottom = 171.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bogli")
+
+[node name="TextureRect" type="TextureRect" parent="TextUI/GameOverPopup" unique_id=527248669]
+z_index = -1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -271.51904
+offset_top = -280.74875
+offset_right = 264.0
+offset_bottom = 275.00003
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_vsju3")
+expand_mode = 1
+
+[node name="BtnPopupProfile" type="Button" parent="TextUI/GameOverPopup" unique_id=820908864]
+layout_mode = 0
+offset_left = 134.0
+offset_top = 162.0
+offset_right = 258.0
+offset_bottom = 214.0
+theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
+theme_override_font_sizes/font_size = 30
+text = "intra profile"
+flat = true
+script = ExtResource("6_3fdej")
+
+[node name="BtnPopupRestart" type="Button" parent="TextUI/GameOverPopup" unique_id=1587308474]
+layout_mode = 0
+offset_left = 151.0
+offset_top = 128.0
+offset_right = 233.0
+offset_bottom = 180.0
+theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
+theme_override_font_sizes/font_size = 30
+text = "Restart"
+flat = true
+script = ExtResource("6_3fdej")
+
+[node name="Label" type="Label" parent="TextUI/GameOverPopup" unique_id=1433324722]
+layout_mode = 0
+offset_left = 69.0
+offset_top = 53.0
+offset_right = 354.0
+offset_bottom = 141.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 48
+text = "GAME OVER"
+
+[node name="PopupText" type="Label" parent="TextUI/GameOverPopup" unique_id=297083944]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 24.0
+
+[node name="BtnExitToLogin" type="Button" parent="TextUI" unique_id=1440915564]
+offset_left = 1672.0
+offset_top = -56.0
+offset_right = 1979.7433
+offset_bottom = 175.0
+icon = SubResource("CompressedTexture2D_jkutv")
+flat = true
+expand_icon = true

@@ -37,4 +37,4 @@ func _on_initial_fetch_ready():
 	status_label.text = "Gerekli minimum veri sağlandı! Oyun başlatılıyor..."
 	progress_bar.value = progress_bar.max_value
 	await get_tree().create_timer(1.0).timeout
-	get_tree().call_deferred("change_scene_to_file", "res://scenes/MainWorld.tscn")
+	get_tree().call_deferred("change_scene_to_file", "res://scenes/Table.tscn")
