@@ -3,16 +3,17 @@ extends Node2D
 @onready var camera = $PlayerCamera
 @onready var masa_alani = $Table/Table 
 
-# Arayüz Elemanları
+# Arayüz Elemanları (Geçti/Kaldı Paneli)
 @onready var karar_paneli = $TextUI/Answerbox
 @onready var btn_gecti = $TextUI/Answerbox/BtnOk
 @onready var btn_kaldi = $TextUI/Answerbox/BtnNo
 @onready var score_label = $TextUI/ScoreLabel
 
-# YENİ EKLENEN PANEL ELEMANLARI
-@onready var result_label = $TextUI/Answerbox/ResultLabel
-@onready var btn_profile = $TextUI/Answerbox/BtnProfile
-@onready var btn_next = $TextUI/Answerbox/BtnNext
+# --- YENİ: GAME OVER POPUP ELEMANLARI ---
+@onready var game_over_popup = $TextUI/GameOverPopup
+@onready var popup_text = $TextUI/GameOverPopup/PopupText
+@onready var btn_popup_profile = $TextUI/GameOverPopup/BtnPopupProfile
+@onready var btn_popup_restart = $TextUI/GameOverPopup/BtnPopupRestart
 
 var masa_acik_mi: bool = false
 var is_animating: bool = false
@@ -28,16 +29,16 @@ func _ready():
 	camera.position.y = CAMERA_YUKARI_Y
 	set_masa_etkilesimi(false)
 	
-	# Buton Bağlantıları
+	# Standart Buton Bağlantıları
 	btn_gecti.pressed.connect(_on_btn_gecti_pressed)
 	btn_kaldi.pressed.connect(_on_btn_kaldi_pressed)
-	btn_next.pressed.connect(_on_btn_next_pressed)
-	btn_profile.pressed.connect(_on_btn_profile_pressed)
 	
-	# Sonuç elemanlarını başlangıçta gizle
-	result_label.hide()
-	btn_profile.hide()
-	btn_next.hide()
+	# Popup Buton Bağlantıları
+	btn_popup_restart.pressed.connect(_on_btn_popup_restart_pressed)
+	btn_popup_profile.pressed.connect(_on_btn_popup_profile_pressed)
+	
+	# Başlangıçta Popup'ı güvenlik amacıyla gizle
+	game_over_popup.hide()
 	
 	if Global.student_pool.size() >= Global.initial_target:
 		start_game()
@@ -85,10 +86,8 @@ func start_game():
 func yeni_ogrenci_geldi():
 	masaya_bakildi = false 
 	
-	# UI Durumunu Karar Verme Aşamasına Sıfırla
-	result_label.hide()
-	btn_profile.hide()
-	btn_next.hide()
+	# Yeni tura başlarken her şeyi sıfırla
+	game_over_popup.hide()
 	btn_gecti.show()
 	btn_kaldi.show()
 	karar_paneli.hide()
@@ -107,7 +106,7 @@ func yeni_ogrenci_geldi():
 	
 	current_student = {
 		"isim": gercek_veri.get("isim", "Bilinmiyor"),
-		"tam_isim": gercek_veri.get("tam_isim", "Bilinmiyor"), # YENİ
+		"tam_isim": gercek_veri.get("tam_isim", "Bilinmiyor"), 
 		"level": gercek_veri.get("campus", "Bilinmiyor"),
 		"passed": ogrenci_gecti_mi,
 		"projeler": gercek_veri.get("projeler", "Veri yok."),
@@ -124,35 +123,38 @@ func _on_btn_gecti_pressed():
 func _on_btn_kaldi_pressed():
 	karar_kontrol(false)
 
-# REVEAL (İSİM GÖSTERME) AŞAMASI
+# --- REVEAL VE GAME OVER KONTROLÜ ---
 func karar_kontrol(oyuncu_karari: bool):
-	# Karar butonlarını gizle
 	btn_gecti.hide()
 	btn_kaldi.hide()
 	
 	var dogru_mu = (oyuncu_karari == current_student["passed"])
 	
 	if dogru_mu:
+		# 1. DOĞRU BİLDİYSE: Kesintisiz akış devam eder
 		score += 10
 		update_score_ui()
-		result_label.text = "DOĞRU KARAR!\nKullanıcı Adı: %s\nTam İsim: %s" % [current_student["isim"], current_student["tam_isim"]]
+		await get_tree().create_timer(0.5).timeout 
+		yeni_ogrenci_geldi()
 	else:
-		result_label.text = "YANLIŞ KARAR! Oyun Sıfırlanıyor.\nKullanıcı Adı: %s\nTam İsim: %s" % [current_student["isim"], current_student["tam_isim"]]
-		score = 0 # İstersen puanı sıfırla ya da game_over tetikle
+		# 2. YANLIŞ BİLDİYSE: Ekranın ortasındaki Popup belirir!
+		score = 0
 		update_score_ui()
+		
+		var gercek_durum = "Geçmişti" if current_student["passed"] else "Kalmıştı"
+		
+		popup_text.text = "YANLIŞ KARAR!\n(Bu öğrenci aslında %s)\n\nKullanıcı Adı: %s\nTam İsim: %s" % [gercek_durum, current_student["isim"], current_student["tam_isim"]]
+		
+		# Popup'ı ekranda göster
+		game_over_popup.show()
 
-	# Sonuç ekranı elemanlarını göster
-	result_label.show()
-	btn_profile.show()
-	btn_next.show()
-
-# INTRA LINKINI TARAYICIDA AÇMA FONKSİYONU
-func _on_btn_profile_pressed():
+# YENİ POPUP: INTRA LINKINI TARAYICIDA AÇMA
+func _on_btn_popup_profile_pressed():
 	var url = "https://profile.intra.42.fr/users/" + current_student["isim"]
-	OS.shell_open(url) # Web exportunda otomatik yeni tab açar!
+	OS.shell_open(url)
 
-# SIRADAKİ ÖĞRENCİYE GEÇİŞ BUTONU
-func _on_btn_next_pressed():
+# YENİ POPUP: OYUNU BAŞTAN BAŞLATMA
+func _on_btn_popup_restart_pressed():
 	yeni_ogrenci_geldi()
 
 func update_score_ui():

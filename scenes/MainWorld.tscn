@@ -2,6 +2,46 @@
 
 [ext_resource type="Script" uid="uid://310e2gp40syr" path="res://script/mainworld.gd" id="1_78anr"]
 [ext_resource type="PackedScene" uid="uid://hmw4xw8thjs5" path="res://scenes/Table.tscn" id="1_nsf4n"]
+[ext_resource type="FontFile" uid="uid://b3tu5xq5fd0ch" path="res://fonts/Felipa-Regular.ttf" id="3_sdt8g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqahb"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jh0ie"]
+
+[sub_resource type="Theme" id="Theme_kvhdw"]
+Button/font_sizes/font_size = 20
+Button/fonts/font = ExtResource("3_sdt8g")
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0)
+Label/constants/line_spacing = 3
+Label/constants/outline_size = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/constants/shadow_outline_size = 1
+Label/font_sizes/font_size = 20
+Label/fonts/font = ExtResource("3_sdt8g")
+Label/styles/focus = SubResource("StyleBoxFlat_iqahb")
+Label/styles/normal = SubResource("StyleBoxEmpty_jh0ie")
 
 [node name="MainWorld" type="Node2D" unique_id=1776388874]
 script = ExtResource("1_78anr")
@@ -15,6 +55,7 @@ anchor_mode = 0
 position = Vector2(0, 1080)
 
 [node name="Table" parent="Table" unique_id=315808563 instance=ExtResource("1_nsf4n")]
+theme = SubResource("Theme_kvhdw")
 
 [node name="TextUI" type="CanvasLayer" parent="." unique_id=2084972072]
 
@@ -30,9 +71,6 @@ offset_bottom = 92.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="ResultLabel" type="Label" parent="TextUI/Answerbox" unique_id=845262398]
-layout_mode = 2
-
 [node name="BtnOk" type="Button" parent="TextUI/Answerbox" unique_id=278464143]
 custom_minimum_size = Vector2(200, 90)
 layout_mode = 2
@@ -43,14 +81,6 @@ custom_minimum_size = Vector2(200, 90)
 layout_mode = 2
 text = "Kaldın"
 
-[node name="BtnProfile" type="Button" parent="TextUI/Answerbox" unique_id=853036369]
-layout_mode = 2
-text = "intra profile"
-
-[node name="BtnNext" type="Button" parent="TextUI/Answerbox" unique_id=630208901]
-layout_mode = 2
-text = "next student"
-
 [node name="ScoreLabel" type="Label" parent="TextUI" unique_id=1161366406]
 anchors_preset = 5
 anchor_left = 0.5
@@ -59,3 +89,36 @@ offset_left = -20.0
 offset_right = 20.0
 offset_bottom = 23.0
 grow_horizontal = 2
+
+[node name="GameOverPopup" type="Panel" parent="TextUI" unique_id=79900368]
+custom_minimum_size = Vector2(400, 300)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_right = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupText" type="Label" parent="TextUI/GameOverPopup" unique_id=2071477121]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="BtnPopupProfile" type="Button" parent="TextUI/GameOverPopup" unique_id=1286361922]
+layout_mode = 0
+offset_left = 154.0
+offset_top = 210.0
+offset_right = 254.0
+offset_bottom = 241.0
+text = "intra profile"
+
+[node name="BtnPopupRestart" type="Button" parent="TextUI/GameOverPopup" unique_id=726355432]
+layout_mode = 0
+offset_left = 166.0
+offset_top = 170.0
+offset_right = 231.0
+offset_bottom = 201.0
+text = "Restart"
