@@ -8,6 +8,7 @@ extends Node2D
 @onready var btn_gecti = $TextUI/Answerbox/BtnOk
 @onready var btn_kaldi = $TextUI/Answerbox/BtnNo
 @onready var score_label = $TextUI/ScoreLabel
+@onready var btn_exit_to_login = $TextUI/BtnExitToLogin
 
 # Game Over Popup Elemanları
 @onready var game_over_popup = $TextUI/GameOverPopup
@@ -36,6 +37,7 @@ func _ready():
 	# Popup Buton Bağlantıları
 	btn_popup_restart.pressed.connect(_on_btn_popup_restart_pressed)
 	btn_popup_profile.pressed.connect(_on_btn_popup_profile_pressed)
+	btn_exit_to_login.pressed.connect(_on_btn_exit_to_login_pressed)
 	
 	# Başlangıçta Popup'ı güvenlik amacıyla gizle
 	game_over_popup.hide()
@@ -168,9 +170,14 @@ func _on_btn_popup_restart_pressed():
 
 func update_score_ui():
 	if score_label:
-		score_label.text = "Puan: " + str(score)
+		score_label.text = "Point: " + str(score)
 
 func set_masa_etkilesimi(active: bool):
 	if masa_alani is Control:
 		if active: masa_alani.mouse_filter = Control.MOUSE_FILTER_PASS
 		else: masa_alani.mouse_filter = Control.MOUSE_FILTER_IGNORE
+func _on_btn_exit_to_login_pressed():
+	Global.access_token = "" 
+	Global.student_pool.clear()
+	
+	get_tree().change_scene_to_file("res://scenes/login_screen.tscn")

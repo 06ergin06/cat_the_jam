@@ -5,7 +5,8 @@
 [ext_resource type="FontVariation" uid="uid://dcvaiuhhp22gt" path="res://font.tres" id="3_sdt8g"]
 [ext_resource type="Texture2D" uid="uid://cegayvutskrly" path="res://assets/Frame 1.png" id="4_jh0ie"]
 [ext_resource type="Texture2D" uid="uid://d5sstduxg5mn" path="res://assets/Frame 2.png" id="5_kvhdw"]
-[ext_resource type="Script" uid="uid://c4rlnd0bli0py" path="res://script/btn.gd" id="5_sj18y"]
+[ext_resource type="Script" path="res://script/btn.gd" id="5_sj18y"]
+[ext_resource type="Texture2D" uid="uid://cvmx20nsldapp" path="res://assets/Untitled design(1).png" id="7_sj18y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqahb"]
 content_margin_left = 4.0
@@ -140,3 +141,15 @@ offset_top = 170.0
 offset_right = 231.0
 offset_bottom = 201.0
 text = "Restart"
+
+[node name="BtnExitToLogin" type="Button" parent="TextUI" unique_id=1449642120]
+offset_left = 1654.0
+offset_top = -56.0
+offset_right = 1983.059
+offset_bottom = 191.0
+icon = ExtResource("7_sj18y")
+flat = true
+expand_icon = true
+script = ExtResource("5_sj18y")
+
+[connection signal="pressed" from="TextUI/BtnExitToLogin" to="." method="_on_btn_exit_to_login_pressed"]
