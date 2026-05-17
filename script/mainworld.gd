@@ -12,13 +12,13 @@ extends Node2D
 
 # Game Over Popup Elemanları
 @onready var game_over_popup = $TextUI/GameOverPopup
-@onready var popup_text = $TextUI/GameOverPopup/PopupText
 @onready var btn_popup_profile = $TextUI/GameOverPopup/BtnPopupProfile
 @onready var btn_popup_restart = $TextUI/GameOverPopup/BtnPopupRestart
 
 var masa_acik_mi: bool = false
 var is_animating: bool = false
 var masaya_bakildi: bool = false 
+var oyun_bitti_mi: bool = false 
 
 const CAMERA_YUKARI_Y = 0.0
 const CAMERA_ASAGI_Y = 1080.0
@@ -30,16 +30,13 @@ func _ready():
 	camera.position.y = CAMERA_YUKARI_Y
 	set_masa_etkilesimi(false)
 	
-	# Standart Buton Bağlantıları
 	btn_gecti.pressed.connect(_on_btn_gecti_pressed)
 	btn_kaldi.pressed.connect(_on_btn_kaldi_pressed)
 	
-	# Popup Buton Bağlantıları
 	btn_popup_restart.pressed.connect(_on_btn_popup_restart_pressed)
 	btn_popup_profile.pressed.connect(_on_btn_popup_profile_pressed)
 	btn_exit_to_login.pressed.connect(_on_btn_exit_to_login_pressed)
 	
-	# Başlangıçta Popup'ı güvenlik amacıyla gizle
 	game_over_popup.hide()
 	
 	if Global.student_pool.size() >= Global.initial_target:
@@ -50,7 +47,7 @@ func _ready():
 		get_tree().change_scene_to_file("res://scenes/loading_screen.tscn")
 
 func _input(event):
-	if event.is_action_pressed("etkilesim_masa") and not is_animating:
+	if event.is_action_pressed("etkilesim_masa") and not is_animating and not oyun_bitti_mi:
 		toggle_view()
 
 func toggle_view():
@@ -59,7 +56,7 @@ func toggle_view():
 	
 	if masa_acik_mi:
 		masaya_bakildi = true
-		karar_paneli.hide() # Aşağı inerken paneli gizle
+		karar_paneli.hide() 
 	
 	var tween = get_tree().create_tween()
 	if masa_acik_mi:
@@ -77,17 +74,24 @@ func _on_transition_finished():
 	if masa_acik_mi:
 		set_masa_etkilesimi(true)
 	else:
-		# Yukarı çıktığımızda, eğer masaya bakıldıysa butonları göster!
 		if masaya_bakildi:
 			karar_paneli.show()
 
+# --- YENİLENEN START_GAME FONKSİYONU ---
+func start_game():
+	print("--- OYUN BAŞLATILDI / SIFIRLANDI ---")
+	score = 0
+	update_score_ui()
+	oyun_bitti_mi = false
+	game_over_popup.hide()
+	yeni_ogrenci_geldi()
+
 func yeni_ogrenci_geldi():
-	# Veri beklenirken eski butonlara basılmasını engellemek için anında gizle
+	oyun_bitti_mi = false 
 	karar_paneli.hide()
 	
 	var gercek_veri = Global.get_next_student()
 	
-	# Veri henüz gelmediyse Panik Modu çalışır
 	if gercek_veri == null:
 		print("PANİK MODU: Veri bekleniyor...")
 		Global.is_fetching = false 
@@ -96,7 +100,6 @@ func yeni_ogrenci_geldi():
 		yeni_ogrenci_geldi()
 		return
 	
-	# Eğer oyuncu veri geldiği an masadaysa "bakıldı" say. Değilse "bakılmadı" de ki inmek zorunda kalsın.
 	masaya_bakildi = masa_acik_mi 
 	
 	if game_over_popup:
@@ -117,56 +120,57 @@ func yeni_ogrenci_geldi():
 		"feedback": gercek_veri.get("feedback", "Veri yok.")
 	}
 	
-	# Eski masa kartlarını güncelleme (İsteğe bağlı, o kartları tamamen kaldırdıysan bu 2 satırı silebilirsin)
 	if masa_alani.has_method("update_cards"):
 		masa_alani.update_cards(current_student)
 		
 	get_tree().call_group("kitap", "verileri_guncelle", current_student)
-	print("BAŞARILI: Veriler Grup sistemiyle kitaba ateşlendi!")
-
-func start_game():
-	score = 0
-	update_score_ui()
-	yeni_ogrenci_geldi()
+	print("YENİ ÖĞRENCİ GELDİ: ", current_student["isim"])
 
 func _on_btn_gecti_pressed():
+	# Butondan odağı hemen çek (Focus Bug'ını engellemek için)
+	btn_gecti.release_focus()
 	karar_kontrol(true)
 
 func _on_btn_kaldi_pressed():
+	# Butondan odağı hemen çek
+	btn_kaldi.release_focus()
 	karar_kontrol(false)
 
-# --- REVEAL VE GAME OVER KONTROLÜ ---
+# --- YENİLENEN KARAR KONTROL ---
 func karar_kontrol(oyuncu_karari: bool):
+	print("Oyuncu Kararı: ", oyuncu_karari, " | Gerçek Durum: ", current_student["passed"])
+	
 	btn_gecti.hide()
 	btn_kaldi.hide()
 	
 	var dogru_mu = (oyuncu_karari == current_student["passed"])
 	
 	if dogru_mu:
-		# 1. DOĞRU BİLDİYSE: Kesintisiz akış devam eder
+		print("KARAR: DOĞRU!")
 		score += 10
 		update_score_ui()
 		await get_tree().create_timer(0.5).timeout 
 		yeni_ogrenci_geldi()
 	else:
-		# 2. YANLIŞ BİLDİYSE: Ekranın ortasındaki Popup belirir!
+		print("KARAR: YANLIŞ! Game Over tetikleniyor...")
 		score = 0
 		update_score_ui()
-		
-		var gercek_durum = "Geçmişti" if current_student["passed"] else "Kalmıştı"
-		
-		popup_text.text = "YANLIŞ KARAR!\n(Bu öğrenci aslında %s)\n\nKullanıcı Adı: %s\nTam İsim: %s" % [gercek_durum, current_student["isim"], current_student["tam_isim"]]
+		oyun_bitti_mi = true 
 		
 		game_over_popup.show()
+		# Paneli ne olursa olsun en öne getir
+		game_over_popup.move_to_front() 
+		print("Game Over paneli ekrana çizildi.")
 
-# INTRA LINKINI TARAYICIDA AÇMA
 func _on_btn_popup_profile_pressed():
 	var url = "https://profile.intra.42.fr/users/" + current_student["isim"]
 	OS.shell_open(url)
 
-# OYUNU BAŞTAN BAŞLATMA
+# --- YENİLENEN RESTART BUTONU ---
 func _on_btn_popup_restart_pressed():
-	yeni_ogrenci_geldi()
+	print("Restart butonuna basıldı!")
+	btn_popup_restart.release_focus() # UI Tıklama odağını temizle
+	start_game() # Direkt öğrenci çağırmak yerine tüm oyunu sıfırla
 
 func update_score_ui():
 	if score_label:
@@ -176,6 +180,7 @@ func set_masa_etkilesimi(active: bool):
 	if masa_alani is Control:
 		if active: masa_alani.mouse_filter = Control.MOUSE_FILTER_PASS
 		else: masa_alani.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 func _on_btn_exit_to_login_pressed():
 	Global.access_token = "" 
 	Global.student_pool.clear()

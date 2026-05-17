@@ -176,11 +176,6 @@ theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "GAME OVER"
 
-[node name="PopupText" type="Label" parent="TextUI/GameOverPopup" unique_id=1168461362]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 24.0
-
 [node name="BtnExitToLogin" type="Button" parent="TextUI" unique_id=602238738]
 offset_left = 1672.0
 offset_top = -56.0
