@@ -50,6 +50,7 @@ func sansurle_isim(isim: String) -> String:
 	return sansurlu_metin.strip_edges()
 
 func verileri_guncelle(student_data: Dictionary):
+	print("KİTABA VERİ ULAŞTI: ", student_data.get("isim", "Bilinmiyor")) # BAĞLANTI KONTROLÜ
 	var gercek_tam_isim = student_data.get("tam_isim", "Bilinmiyor")
 	var gizli_isim = sansurle_isim(gercek_tam_isim)
 	
@@ -63,10 +64,11 @@ func verileri_guncelle(student_data: Dictionary):
 		student_data.get("projeler", "Veri yok.")
 	]
 
-# Sadece farenin imleci kitabın üzerindeyken çalışır
+# Sadece farenin imleci kitabın üzerindeyken ve ÖNÜNDE ENGEL YOKKEN çalışır
 func _on_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			print("KİTABIN ALANINA TIKLANDI!") # TIKLAMA KONTROLÜ
 			is_pressed_on_book = true
 			click_start_pos = get_global_mouse_position()
 			

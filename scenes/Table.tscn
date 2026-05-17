@@ -21,6 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_70yv6")
 
 [node name="BackGround" type="TextureRect" parent="." unique_id=304831816]
@@ -38,6 +39,7 @@ offset_left = 440.0
 offset_top = 212.0
 offset_right = 480.0
 offset_bottom = 252.0
+mouse_filter = 2
 
 [node name="LogCard" type="PanelContainer" parent="Cards" unique_id=780400908]
 layout_mode = 0
@@ -46,6 +48,9 @@ offset_top = 118.0
 offset_right = 1123.0
 offset_bottom = 251.0
 script = ExtResource("4_d5upp")
+
+[node name="Label" type="Label" parent="Cards/LogCard" unique_id=114634690]
+layout_mode = 2
 
 [node name="BookArea" parent="." unique_id=905941486 instance=ExtResource("4_7e6ia")]
 unique_name_in_owner = true
@@ -88,12 +93,13 @@ script = ExtResource("6_3fdej")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -26.0
-offset_top = 32.0
-offset_right = 25.0
-offset_bottom = 74.0
+offset_left = -794.0
+offset_top = 124.0
+offset_right = -743.0
+offset_bottom = 166.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
 
 [node name="GameOverPopup" type="Panel" parent="TextUI" unique_id=972294087]
 custom_minimum_size = Vector2(400, 300)

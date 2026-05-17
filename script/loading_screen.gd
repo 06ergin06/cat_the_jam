@@ -17,10 +17,10 @@ func _ready():
 	if Global.load_pool_from_disk() and Global.student_pool.size() >= Global.initial_target:
 		_on_initial_fetch_ready()
 	elif Global.access_token != "":
-		status_label.text = "Eksik veriler arka planda yükleniyor..."
+		status_label.text = "Downloading data..."
 		Global.check_and_fill_buffer()
 	elif Global.auth_code != "":
-		status_label.text = "Giriş başarılı. Veriler indiriliyor..."
+		status_label.text = "Login success. Downloading data..."
 		Global.get_access_token(Global.auth_code)
 	else:
 		status_label.text = "HATA: Auth Code bulunamadı!"
@@ -34,7 +34,7 @@ func _process(delta):
 		progress_bar.value = lerp(progress_bar.value, hedef_yuzde, 5.0 * delta)
 
 func _on_initial_fetch_ready():
-	status_label.text = "Gerekli minimum veri sağlandı! Oyun başlatılıyor..."
+	status_label.text = "Game starting"
 	progress_bar.value = progress_bar.max_value
 	await get_tree().create_timer(1.0).timeout
 	get_tree().call_deferred("change_scene_to_file", "res://scenes/Table.tscn")
