@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://cegayvutskrly" path="res://assets/Frame 1.png" id="4_jh0ie"]
 [ext_resource type="Texture2D" uid="uid://d5sstduxg5mn" path="res://assets/Frame 2.png" id="5_kvhdw"]
 [ext_resource type="Script" uid="uid://c4rlnd0bli0py" path="res://script/btn.gd" id="5_sj18y"]
+[ext_resource type="Texture2D" uid="uid://bp4jcmtskp085" path="res://assets/Untitled design(2).png" id="7_mtt3w"]
+[ext_resource type="Texture2D" uid="uid://cjpeaoodi6du0" path="res://assets/Untitled design.png" id="7_sj18y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqahb"]
 content_margin_left = 4.0
@@ -45,6 +47,9 @@ Label/font_sizes/font_size = 20
 Label/fonts/font = ExtResource("3_sdt8g")
 Label/styles/focus = SubResource("StyleBoxFlat_iqahb")
 Label/styles/normal = SubResource("StyleBoxEmpty_jh0ie")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mtt3w"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="MainWorld" type="Node2D" unique_id=1776388874]
 script = ExtResource("1_78anr")
@@ -94,17 +99,32 @@ expand_icon = true
 script = ExtResource("5_sj18y")
 
 [node name="ScoreLabel" type="Label" parent="TextUI" unique_id=1161366406]
-visibility_layer = 2
 anchors_preset = -1
 anchor_left = 0.509
 anchor_top = 0.057000004
 anchor_right = 0.512
 anchor_bottom = 0.058000002
 offset_left = -51.28003
-offset_top = -28.560005
-offset_right = 48.95996
-offset_bottom = 27.359997
+offset_top = -27.560005
+offset_right = 44.95996
+offset_bottom = 28.359997
 grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="TextUI/ScoreLabel" unique_id=1892080188]
+z_index = -1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.185
+anchor_top = 0.162
+anchor_right = 0.915
+anchor_bottom = 0.89300007
+offset_left = -430.87
+offset_top = -271.234
+offset_right = 383.66998
+offset_bottom = 232.099
+texture = ExtResource("7_mtt3w")
+expand_mode = 1
 
 [node name="GameOverPopup" type="Panel" parent="TextUI" unique_id=79900368]
 custom_minimum_size = Vector2(400, 300)
@@ -119,24 +139,57 @@ offset_right = 251.0
 offset_bottom = 171.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mtt3w")
 
-[node name="PopupText" type="Label" parent="TextUI/GameOverPopup" unique_id=2071477121]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="TextureRect" type="TextureRect" parent="TextUI/GameOverPopup" unique_id=589294289]
+z_index = -1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.052
+anchor_top = 0.238
+anchor_right = 0.96400005
+anchor_bottom = 0.78400004
+offset_left = -1033.8
+offset_top = -773.4
+offset_right = 1050.4
+offset_bottom = 854.8
+texture = ExtResource("7_sj18y")
 
 [node name="BtnPopupProfile" type="Button" parent="TextUI/GameOverPopup" unique_id=1286361922]
 layout_mode = 0
-offset_left = 154.0
-offset_top = 210.0
-offset_right = 254.0
-offset_bottom = 241.0
+offset_left = 152.0
+offset_top = 193.0
+offset_right = 276.0
+offset_bottom = 245.0
+theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
+theme_override_font_sizes/font_size = 30
 text = "intra profile"
+flat = true
+script = ExtResource("5_sj18y")
 
 [node name="BtnPopupRestart" type="Button" parent="TextUI/GameOverPopup" unique_id=726355432]
 layout_mode = 0
-offset_left = 166.0
-offset_top = 170.0
-offset_right = 231.0
-offset_bottom = 201.0
+offset_left = 171.0
+offset_top = 156.0
+offset_right = 253.0
+offset_bottom = 208.0
+theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
+theme_override_font_sizes/font_size = 30
 text = "Restart"
+flat = true
+script = ExtResource("5_sj18y")
+
+[node name="Label" type="Label" parent="TextUI/GameOverPopup" unique_id=1947154143]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 92.0
+offset_right = 365.0
+offset_bottom = 180.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 48
+text = "GAME OVER"
+
+[node name="PopupText" type="Label" parent="TextUI/GameOverPopup" unique_id=1168461362]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 24.0
