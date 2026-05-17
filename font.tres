@@ -1,0 +1,13 @@
+[gd_resource type="FontVariation" format=3 uid="uid://dcvaiuhhp22gt"]
+
+[ext_resource type="FontFile" uid="uid://b3tu5xq5fd0ch" path="res://fonts/Felipa-Regular.ttf" id="1_4pged"]
+[ext_resource type="FontFile" uid="uid://cu17dk8qxtb6t" path="res://fonts/NotoSans-Italic-VariableFont_wdth,wght.ttf" id="2_xofve"]
+[ext_resource type="FontFile" uid="uid://bwryx6wt8smoc" path="res://fonts/NotoSansJP-VariableFont_wght.ttf" id="3_uj225"]
+[ext_resource type="FontFile" uid="uid://tw48x1sucery" path="res://fonts/NotoSansKR-VariableFont_wght.ttf" id="4_wloci"]
+
+[sub_resource type="FontVariation" id="FontVariation_uj225"]
+base_font = ExtResource("1_4pged")
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_xofve"), ExtResource("3_uj225"), ExtResource("4_wloci")])
+base_font = SubResource("FontVariation_uj225")

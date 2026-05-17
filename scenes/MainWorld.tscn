@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://310e2gp40syr" path="res://script/mainworld.gd" id="1_78anr"]
 [ext_resource type="PackedScene" uid="uid://hmw4xw8thjs5" path="res://scenes/Table.tscn" id="1_nsf4n"]
-[ext_resource type="FontFile" uid="uid://b3tu5xq5fd0ch" path="res://fonts/Felipa-Regular.ttf" id="3_sdt8g"]
+[ext_resource type="FontVariation" uid="uid://dcvaiuhhp22gt" path="res://font.tres" id="3_sdt8g"]
+[ext_resource type="AudioStream" uid="uid://d0wdaeefyevtm" path="res://audio/Guilty Hurdy-Gurdy.mp3" id="4_iqahb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqahb"]
 content_margin_left = 4.0
@@ -122,3 +123,8 @@ offset_top = 170.0
 offset_right = 231.0
 offset_bottom = 201.0
 text = "Restart"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=708422876]
+stream = ExtResource("4_iqahb")
+volume_db = -20.0
+autoplay = true

@@ -57,7 +57,7 @@ func toggle_view():
 	
 	if masa_acik_mi:
 		masaya_bakildi = true
-		karar_paneli.hide()
+		karar_paneli.hide() # Aşağı inerken paneli gizle
 	
 	var tween = get_tree().create_tween()
 	if masa_acik_mi:
@@ -75,32 +75,35 @@ func _on_transition_finished():
 	if masa_acik_mi:
 		set_masa_etkilesimi(true)
 	else:
+		# Yukarı çıktığımızda, eğer masaya bakıldıysa butonları göster!
 		if masaya_bakildi:
 			karar_paneli.show()
 
-func start_game():
-	score = 0
-	update_score_ui()
-	yeni_ogrenci_geldi()
-
 func yeni_ogrenci_geldi():
-	masaya_bakildi = false 
-	
-	# Yeni tura başlarken her şeyi sıfırla
-	game_over_popup.hide()
-	btn_gecti.show()
-	btn_kaldi.show()
+	# Veri beklenirken eski butonlara basılmasını engellemek için anında gizle
 	karar_paneli.hide()
 	
 	var gercek_veri = Global.get_next_student()
 	
+	# Veri henüz gelmediyse Panik Modu çalışır (Ama masaya_bakildi değerini bozmaz!)
 	if gercek_veri == null:
-		print("PANİK MODU: Yeniden tetikleniyor...")
+		print("PANİK MODU: Veri bekleniyor...")
 		Global.is_fetching = false 
 		Global.check_and_fill_buffer()
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(1.0).timeout
 		yeni_ogrenci_geldi()
 		return
+	
+	# --- VERİ BAŞARIYLA GELDİKTEN SONRA ÇALIŞACAK KISIM ---
+	
+	# Eğer oyuncu veri geldiği an masadaysa "bakıldı" say. Değilse "bakılmadı" de ki inmek zorunda kalsın.
+	masaya_bakildi = masa_acik_mi 
+	
+	if game_over_popup:
+		game_over_popup.hide()
+		
+	btn_gecti.show()
+	btn_kaldi.show()
 	
 	var ogrenci_gecti_mi = (gercek_veri.get("pool_status", "unknown") == "passed")
 	
@@ -116,6 +119,11 @@ func yeni_ogrenci_geldi():
 	
 	if masa_alani.has_method("update_cards"):
 		masa_alani.update_cards(current_student)
+
+func start_game():
+	score = 0
+	update_score_ui()
+	yeni_ogrenci_geldi()
 
 func _on_btn_gecti_pressed():
 	karar_kontrol(true)
