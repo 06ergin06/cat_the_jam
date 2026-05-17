@@ -2,57 +2,16 @@
 
 [ext_resource type="Script" uid="uid://310e2gp40syr" path="res://script/mainworld.gd" id="1_78anr"]
 [ext_resource type="PackedScene" uid="uid://hmw4xw8thjs5" path="res://scenes/Table.tscn" id="1_nsf4n"]
-[ext_resource type="FontVariation" uid="uid://dcvaiuhhp22gt" path="res://font.tres" id="3_sdt8g"]
 [ext_resource type="Texture2D" uid="uid://cegayvutskrly" path="res://assets/Frame 1.png" id="4_jh0ie"]
 [ext_resource type="Texture2D" uid="uid://d5sstduxg5mn" path="res://assets/Frame 2.png" id="5_kvhdw"]
 [ext_resource type="Script" uid="uid://c4rlnd0bli0py" path="res://script/btn.gd" id="5_sj18y"]
 [ext_resource type="Texture2D" uid="uid://c6emseh2l4khw" path="res://assets/score.png" id="7_krl21"]
-[ext_resource type="Texture2D" uid="uid://d0grasl6np2cj" path="res://assets/Your paragraph text(3).png" id="8_mtt3w"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqahb"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 1, 1, 0.75)
-draw_center = false
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jh0ie"]
-
-[sub_resource type="Theme" id="Theme_kvhdw"]
-Button/font_sizes/font_size = 20
-Button/fonts/font = ExtResource("3_sdt8g")
-Label/colors/font_color = Color(1, 1, 1, 1)
-Label/colors/font_outline_color = Color(0, 0, 0, 1)
-Label/colors/font_shadow_color = Color(0, 0, 0, 0)
-Label/constants/line_spacing = 3
-Label/constants/outline_size = 0
-Label/constants/shadow_offset_x = 1
-Label/constants/shadow_offset_y = 1
-Label/constants/shadow_outline_size = 1
-Label/font_sizes/font_size = 20
-Label/fonts/font = ExtResource("3_sdt8g")
-Label/styles/focus = SubResource("StyleBoxFlat_iqahb")
-Label/styles/normal = SubResource("StyleBoxEmpty_jh0ie")
+[ext_resource type="Texture2D" uid="uid://c6ele4sltwxkg" path="res://assets/Your paragraph text(4).png" id="7_sj18y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mtt3w"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_krl21"]
-load_path = "res://.godot/imported/Untitled design(1).png-ebe870db70627436be2e39483df032e5.ctex"
 
 [node name="MainWorld" type="Node2D" unique_id=1776388874]
 script = ExtResource("1_78anr")
@@ -66,11 +25,11 @@ anchor_mode = 0
 position = Vector2(0, 1080)
 
 [node name="Table" parent="Table" unique_id=315808563 instance=ExtResource("1_nsf4n")]
-offset_left = 932.0
-offset_top = 490.0
-offset_right = 932.0
-offset_bottom = 490.0
-theme = SubResource("Theme_kvhdw")
+anchors_preset = 15
+offset_left = 13.0
+offset_top = 41.0
+offset_right = 13.0
+offset_bottom = 41.0
 
 [node name="TextUI" type="CanvasLayer" parent="." unique_id=2084972072]
 
@@ -153,11 +112,11 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -271.51904
 offset_top = -280.74875
-offset_right = 271.51904
-offset_bottom = 280.74875
+offset_right = 264.0
+offset_bottom = 275.00003
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_mtt3w")
+texture = ExtResource("7_sj18y")
 expand_mode = 1
 
 [node name="BtnPopupProfile" type="Button" parent="TextUI/GameOverPopup" unique_id=1286361922]
