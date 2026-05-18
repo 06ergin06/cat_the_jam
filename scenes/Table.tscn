@@ -1,13 +1,21 @@
 [gd_scene format=3 uid="uid://hmw4xw8thjs5"]
 
 [ext_resource type="Script" uid="uid://bpfk4tbeukwpa" path="res://script/game_manager.gd" id="1_70yv6"]
-[ext_resource type="Texture2D" uid="uid://ts1gs8hjlitn" path="res://assets/Your paragraph text(1).png" id="2_7e6ia"]
+[ext_resource type="Texture2D" uid="uid://brqkmkwavk0f5" path="res://assets/Your paragraph text(10).png" id="2_wj4jt"]
+[ext_resource type="Texture2D" uid="uid://c2hg4mwtnbidf" path="res://assets/dikey_parsomen.png" id="3_3fdej"]
 [ext_resource type="PackedScene" uid="uid://b381omk65jj26" path="res://scenes/Book.tscn" id="4_7e6ia"]
 [ext_resource type="Script" uid="uid://b2fo6p3pioxt6" path="res://script/card_sc.gd" id="4_d5upp"]
-[ext_resource type="Texture2D" uid="uid://cegayvutskrly" path="res://assets/Frame 1.png" id="5_wj4jt"]
-[ext_resource type="Script" path="res://script/btn.gd" id="6_3fdej"]
-[ext_resource type="Texture2D" uid="uid://d5sstduxg5mn" path="res://assets/Frame 2.png" id="7_cxxql"]
-[ext_resource type="Texture2D" uid="uid://c6ele4sltwxkg" path="res://assets/Your paragraph text(4).png" id="9_vsju3"]
+[ext_resource type="Script" uid="uid://c4rlnd0bli0py" path="res://script/btn.gd" id="6_3fdej"]
+[ext_resource type="Script" uid="uid://jim6ncpprfl5" path="res://script/btntex.gd" id="6_cxxql"]
+[ext_resource type="Texture2D" uid="uid://bu2lgl0c0uaje" path="res://assets/yess.png" id="7_oiyp4"]
+[ext_resource type="Texture2D" uid="uid://dssuqj36cr8er" path="res://assets/noo.png" id="8_cxxql"]
+[ext_resource type="Texture2D" uid="uid://cb83fusd4fn1o" path="res://assets/Your paragraph text(11).png" id="9_3fdej"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cxxql"]
+texture = ExtResource("3_3fdej")
+
+[sub_resource type="LabelSettings" id="LabelSettings_3fdej"]
+font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bogli"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -16,21 +24,17 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="Table" type="Control" unique_id=315808563]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 mouse_filter = 2
 script = ExtResource("1_70yv6")
 
 [node name="BackGround" type="TextureRect" parent="." unique_id=304831816]
 layout_mode = 0
-offset_left = -170.0
-offset_top = -99.0
-offset_right = 2015.0
-offset_bottom = 1164.0
-texture = ExtResource("2_7e6ia")
+offset_left = -2.0
+offset_top = -1.0
+offset_right = 1867.0
+offset_bottom = 1012.0
+texture = ExtResource("2_wj4jt")
 expand_mode = 1
 
 [node name="Cards" type="Control" parent="." unique_id=50886936]
@@ -41,62 +45,63 @@ offset_right = 480.0
 offset_bottom = 252.0
 mouse_filter = 2
 
-[node name="LogCard" type="PanelContainer" parent="Cards" unique_id=780400908]
+[node name="LogCard" type="Panel" parent="Cards" unique_id=61518200]
 layout_mode = 0
-offset_left = 994.0
-offset_top = 118.0
-offset_right = 1123.0
-offset_bottom = 251.0
+offset_left = 616.0
+offset_top = -57.0
+offset_right = 1167.0
+offset_bottom = 356.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_cxxql")
 script = ExtResource("4_d5upp")
 
 [node name="Label" type="Label" parent="Cards/LogCard" unique_id=114634690]
-layout_mode = 2
+layout_mode = 0
+offset_left = 177.0
+offset_top = 85.0
+offset_right = 374.0
+offset_bottom = 339.0
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+label_settings = SubResource("LabelSettings_3fdej")
+autowrap_mode = 2
+clip_text = true
 
 [node name="BookArea" parent="." unique_id=905941486 instance=ExtResource("4_7e6ia")]
 unique_name_in_owner = true
-position = Vector2(559, 379)
+position = Vector2(543, 298)
 
 [node name="TextUI" type="CanvasLayer" parent="." unique_id=1118087528]
 
-[node name="Answerbox" type="VBoxContainer" parent="TextUI" unique_id=2046915120]
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -332.0
-offset_top = -67.0
-offset_right = -132.0
-offset_bottom = 117.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="BtnNo" type="TextureButton" parent="TextUI" unique_id=722394249]
+clip_contents = true
+offset_left = 1542.0
+offset_top = 622.0
+offset_right = 1744.0
+offset_bottom = 918.52075
+texture_normal = ExtResource("8_cxxql")
+ignore_texture_size = true
+stretch_mode = 6
+script = ExtResource("6_cxxql")
 
-[node name="BtnOk" type="Button" parent="TextUI/Answerbox" unique_id=534334698]
-custom_minimum_size = Vector2(200, 90)
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-icon = ExtResource("5_wj4jt")
-flat = true
-expand_icon = true
-script = ExtResource("6_3fdej")
-
-[node name="BtnNo" type="Button" parent="TextUI/Answerbox" unique_id=919088398]
-custom_minimum_size = Vector2(200, 90)
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-icon = ExtResource("7_cxxql")
-flat = true
-expand_icon = true
-script = ExtResource("6_3fdej")
+[node name="BtnOk" type="TextureButton" parent="TextUI" unique_id=1016101008]
+clip_contents = true
+offset_left = 123.0
+offset_top = 630.0
+offset_right = 325.0
+offset_bottom = 926.52075
+texture_normal = ExtResource("7_oiyp4")
+ignore_texture_size = true
+stretch_mode = 6
+script = ExtResource("6_cxxql")
 
 [node name="ScoreLabel" type="Label" parent="TextUI" unique_id=1326133594]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -794.0
-offset_top = 124.0
-offset_right = -743.0
-offset_bottom = 166.0
+offset_left = -786.0
+offset_top = 116.0
+offset_right = -735.0
+offset_bottom = 161.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 32
@@ -124,48 +129,38 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -271.51904
-offset_top = -280.74875
-offset_right = 264.0
-offset_bottom = 275.00003
+offset_left = -329.0
+offset_top = -298.0
+offset_right = 352.0
+offset_bottom = 257.74878
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("9_vsju3")
+texture = ExtResource("9_3fdej")
 expand_mode = 1
 
 [node name="BtnPopupProfile" type="Button" parent="TextUI/GameOverPopup" unique_id=820908864]
 layout_mode = 0
-offset_left = 134.0
-offset_top = 162.0
-offset_right = 258.0
-offset_bottom = 214.0
+offset_left = -37.0
+offset_top = 263.0
+offset_right = 144.0
+offset_bottom = 315.0
 theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 16
 text = "intra profile"
 flat = true
 script = ExtResource("6_3fdej")
 
 [node name="BtnPopupRestart" type="Button" parent="TextUI/GameOverPopup" unique_id=1587308474]
 layout_mode = 0
-offset_left = 151.0
-offset_top = 128.0
-offset_right = 233.0
-offset_bottom = 180.0
+offset_left = 319.0
+offset_top = 264.0
+offset_right = 432.0
+offset_bottom = 314.0
 theme_override_colors/font_color = Color(0.0093103545, 0.0093103545, 0.0093103545, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 20
 text = "Restart"
 flat = true
 script = ExtResource("6_3fdej")
-
-[node name="Label" type="Label" parent="TextUI/GameOverPopup" unique_id=1433324722]
-layout_mode = 0
-offset_left = 69.0
-offset_top = 53.0
-offset_right = 354.0
-offset_bottom = 141.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_font_sizes/font_size = 48
-text = "GAME OVER"
 
 [node name="PopupText" type="Label" parent="TextUI/GameOverPopup" unique_id=297083944]
 layout_mode = 0

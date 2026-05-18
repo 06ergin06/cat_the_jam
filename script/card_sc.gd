@@ -1,4 +1,4 @@
-extends PanelContainer
+extends Panel
 
 # Ana oyun yöneticisine kartın bırakıldığını haber vermek için özel sinyal
 signal card_dropped(card_node)
