@@ -213,7 +213,7 @@ func _on_feedbacks_completed(_result, response_code, _headers, body, http_reques
 					if clean.length() > 65: clean = clean.left(60) + "..."
 					feedback_text += "- " + clean + "\n\n"
 					
-		student_data["feedback"] = feedback_text if feedback_text != "" else "Yorumsuz değerlendirmeler."
+		student_data["feedback"] = feedback_text if feedback_text != "" else "No feedback."
 		student_pool.append(student_data)
 		save_current_pool()
 		if student_pool.size() == initial_target: initial_fetch_done.emit()
