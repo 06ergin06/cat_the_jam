@@ -86,7 +86,7 @@ func update_cards(student_data: Dictionary):
 	print("MASAYA VERİ GELDİ")
 	
 	if feedback_card and feedback_card.has_node("Label"):
-		feedback_card.get_node("Label").text = "SON FEEDBACKLER\n-----------------\n" + str(student_data.get("feedback", "Veri Yok"))
+		feedback_card.get_node("Label").text = "LAST FEEDBACKS\n-----------------\n" + str(student_data.get("feedback", "Veri Yok"))
 		
 	if has_node("Cards"):
 		for card in $Cards.get_children():

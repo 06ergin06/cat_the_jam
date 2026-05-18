@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c2hg4mwtnbidf" path="res://assets/dikey_parsomen.png" id="3_3fdej"]
 [ext_resource type="PackedScene" uid="uid://b381omk65jj26" path="res://scenes/Book.tscn" id="4_7e6ia"]
 [ext_resource type="Script" uid="uid://b2fo6p3pioxt6" path="res://script/card_sc.gd" id="4_d5upp"]
-[ext_resource type="Script" uid="uid://c4rlnd0bli0py" path="res://script/btn.gd" id="6_3fdej"]
+[ext_resource type="Script" path="res://script/btn.gd" id="6_3fdej"]
 [ext_resource type="Script" uid="uid://jim6ncpprfl5" path="res://script/btntex.gd" id="6_cxxql"]
 [ext_resource type="Texture2D" uid="uid://bu2lgl0c0uaje" path="res://assets/yess.png" id="7_oiyp4"]
 [ext_resource type="Texture2D" uid="uid://dssuqj36cr8er" path="res://assets/noo.png" id="8_cxxql"]
